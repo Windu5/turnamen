@@ -8,54 +8,13 @@ export const getOrCreateTournament = async (
   bracketSize: number,
   layoutMode: BracketLayoutMode
 ): Promise<string> => {
-  let tournamentId = localStorage.getItem('mahap_tournament_id');
-
-  if (tournamentId) {
-    // Verify if it exists in DB
-    const { data } = await supabase
-      .from('tournaments')
-      .select('id')
-      .eq('id', tournamentId)
-      .limit(1);
-
-    if (data && data.length > 0) return tournamentId;
-  }
-
-  // If no ID in localStorage (e.g. new visitor), always fetch the most recent tournament
-  const { data: recent } = await supabase
-    .from('tournaments')
-    .select('id')
-    .order('created_at', { ascending: false })
-    .limit(1);
-
-  if (recent && recent.length > 0) {
-    localStorage.setItem('mahap_tournament_id', recent[0].id);
-    return recent[0].id;
-  }
-
-  // Fallback ONLY if the database is 100% empty
-  const { data, error } = await supabase
-    .from('tournaments')
-    .insert([{ title, bracket_size: bracketSize, layout_mode: layoutMode }])
-    .select('id')
-    .single();
-
-  if (error || !data) {
-    console.error('Error creating tournament:', error);
-    throw new Error('Gagal membuat turnamen');
-  }
-
-  // Ensure BYE team exists in this tournament
-  await supabase.from('teams').insert([{
-    id: 'BYE',
-    tournament_id: data.id,
-    name: 'BYE',
-    category: 'Non-Seeded',
-    club: ''
-  }]);
-
-  localStorage.setItem('mahap_tournament_id', data.id);
-  return data.id;
+  // Hardcode ID turnamen utama secara permanen agar kebal dari masalah cache browser
+  const MAIN_TOURNAMENT_ID = '5b5f8797-0d38-43c7-ac0e-e358f2e30242';
+  
+  // Tetap simpan ke localStorage agar kode lain yang membaca localStorage tetap berfungsi
+  localStorage.setItem('mahap_tournament_id', MAIN_TOURNAMENT_ID);
+  
+  return MAIN_TOURNAMENT_ID;
 };
 
 export const fetchTournamentData = async (tournamentId: string) => {
