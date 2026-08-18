@@ -27,7 +27,7 @@ import {
   generateSymmetricalByes,
   BYE_TEAM,
 } from './utils/bracketUtils';
-import { X, Tv, ChevronDown, Trophy, Loader2, Dices } from 'lucide-react';
+import { X, Tv, ChevronDown, Trophy, Loader2, Dices, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { getOrCreateTournament, fetchTournamentData, saveTeam, deleteTeam, deleteAllTeams, saveMatch, saveMatchesBulk, deleteAllMatches, updateTournamentSettings } from './utils/db';
 
 const LOCAL_STORAGE_KEY = 'mahap_tournament_app_state_v1';
@@ -88,6 +88,11 @@ export default function App() {
   const [tournamentPin, setTournamentPin] = useState<string>('123456');
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const [pinInput, setPinInput] = useState<string>('');
+
+  // Calculate Optimal Size for Draw Safety Lock
+  const validSizes = [4, 8, 16, 32, 64, 128];
+  const optimalSize = validSizes.find(v => v >= teams.length) || 128;
+  const isDrawLocked = bracketSize !== optimalSize && teams.length > 0;
 
   // Modal States
   const [isLiveDrawOpen, setIsLiveDrawOpen] = useState(false);
@@ -881,7 +886,29 @@ export default function App() {
           isAdmin={isAdmin}
           onOpenLogin={() => setIsLoginModalOpen(true)}
           onLogout={handleLogoutAdmin}
+          isDrawLocked={isDrawLocked}
         />
+      )}
+      
+      {/* Admin Smart Warning Banner */}
+      {isAdmin && !isPresentationMode && activeTab === 'bagan' && teams.length > 0 && (
+        <div className={`px-4 py-2 text-sm flex items-center justify-center gap-2 font-medium print:hidden ${
+          isDrawLocked 
+            ? 'bg-amber-500/20 text-amber-300 border-b border-amber-500/30' 
+            : 'bg-emerald-500/10 text-emerald-400 border-b border-emerald-500/20'
+        }`}>
+          {isDrawLocked ? (
+            <>
+              <AlertTriangle size={16} />
+              <span>Peringatan: Ukuran bagan ({bracketSize} slot) tidak sesuai dengan jumlah peserta ({teams.length} tim). Tombol undian dikunci, harap klik tombol 'Sesuaikan' di toolbar bagan!</span>
+            </>
+          ) : (
+            <>
+              <CheckCircle2 size={16} />
+              <span>Bagan sudah optimal ({bracketSize} slot untuk {teams.length} peserta).</span>
+            </>
+          )}
+        </div>
       )}
 
       {/* Main Content Area */}
@@ -936,6 +963,7 @@ export default function App() {
                         activeTab={activeTab}
                         onChangeTab={(tab) => setActiveTab(tab)}
                         isAdmin={isAdmin}
+                        isDrawLocked={isDrawLocked}
                       />
                 </div>
               </div>

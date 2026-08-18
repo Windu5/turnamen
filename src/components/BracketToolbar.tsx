@@ -46,6 +46,7 @@ interface BracketToolbarProps {
   activeTab?: string;
   onChangeTab?: (tab: 'bagan' | 'jadwal') => void;
   isAdmin?: boolean;
+  isDrawLocked?: boolean;
 }
 
 export const BracketToolbar: React.FC<BracketToolbarProps> = ({
@@ -72,6 +73,7 @@ export const BracketToolbar: React.FC<BracketToolbarProps> = ({
   activeTab,
   onChangeTab,
   isAdmin,
+  isDrawLocked = false,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -236,15 +238,21 @@ export const BracketToolbar: React.FC<BracketToolbarProps> = ({
               </button>
               
               <div className="hidden md:block w-px h-6 bg-slate-700 mx-1"></div>
-              
-              <button
-                type="button"
-                onClick={onOpenManualDraw}
-                className="p-1.5 bg-indigo-500/10 hover:bg-indigo-500/30 border border-indigo-500/30 text-indigo-400 rounded-lg transition-colors cursor-pointer"
-                title="Cabut Undian Manual"
-              >
-                <Dices size={15} />
-              </button>
+              {onOpenManualDraw && (
+                <button
+                  type="button"
+                  onClick={onOpenManualDraw}
+                  disabled={isDrawLocked}
+                  className={`p-1.5 border rounded-lg transition-colors ${
+                    isDrawLocked
+                      ? 'bg-slate-800/50 border-slate-700/50 text-slate-500 cursor-not-allowed'
+                      : 'bg-indigo-500/10 hover:bg-indigo-500/30 border-indigo-500/30 text-indigo-400 cursor-pointer'
+                  }`}
+                  title="Cabut Undian Manual"
+                >
+                  <Dices size={15} />
+                </button>
+              )}
             </div>
             )}
 
