@@ -1,0 +1,6 @@
+{
+  "name": "Sistem Live Draw & Bagan Pertandingan",
+  "description": "Aplikasi manajemen turnamen, live draw acak pot, dan papan skema bagan dinamis untuk MAHAP OPEN 2026.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,413 @@
+@import "tailwindcss";
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media print {
+  body {
+    background-color: white !important;
+    color: black !important;
+  }
+
+  header,
+  nav,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+
+  .bg-slate-900,
+  .bg-slate-950,
+  .bg-slate-800 {
+    background-color: white !important;
+    color: black !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: none !important;
+  }
+
+  .text-slate-100,
+  .text-slate-200,
+  .text-slate-300,
+  .text-slate-400 {
+    color: black !important;
+  }
+}
+
+/* Bracket connecting lines */
+:root {
+  --bracket-line-color: #475569;
+}
+
+@media print {
+  :root {
+    --bracket-line-color: #000000;
+  }
+}
+
+/* LEFT SIDE & ONE-SIDED */
+.left-side .bracket-column:not(:last-child) .match-card::after,
+.layout-onesided .bracket-column:not(:last-child) .match-card::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -24px;
+  width: 24px;
+  height: 2px;
+  background-color: var(--bracket-line-color);
+  transform: translateY(-50%);
+}
+
+.left-side .bracket-column:not(:first-child) .match-card::before,
+.layout-onesided .bracket-column:not(:first-child) .match-card::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -24px;
+  width: 24px;
+  height: 2px;
+  background-color: var(--bracket-line-color);
+  transform: translateY(-50%);
+}
+
+.left-side .bracket-column:not(:last-child) .match-wrapper:nth-child(odd)::after,
+.layout-onesided .bracket-column:not(:last-child) .match-wrapper:nth-child(odd)::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -24px;
+  width: 2px;
+  height: 50%;
+  background-color: var(--bracket-line-color);
+}
+
+.left-side .bracket-column:not(:last-child) .match-wrapper:nth-child(even)::after,
+.layout-onesided .bracket-column:not(:last-child) .match-wrapper:nth-child(even)::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -24px;
+  width: 2px;
+  height: 50%;
+  background-color: var(--bracket-line-color);
+}
+
+/* RIGHT SIDE (Two-sided layout) */
+.right-side .bracket-column:not(:last-child) .match-card::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -24px;
+  width: 24px;
+  height: 2px;
+  background-color: var(--bracket-line-color);
+  transform: translateY(-50%);
+}
+
+.right-side .bracket-column:not(:first-child) .match-card::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -24px;
+  width: 24px;
+  height: 2px;
+  background-color: var(--bracket-line-color);
+  transform: translateY(-50%);
+}
+
+.right-side .bracket-column:not(:last-child) .match-wrapper:nth-child(odd)::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -24px;
+  width: 2px;
+  height: 50%;
+  background-color: var(--bracket-line-color);
+}
+
+.right-side .bracket-column:not(:last-child) .match-wrapper:nth-child(even)::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -24px;
+  width: 2px;
+  height: 50%;
+  background-color: var(--bracket-line-color);
+}
+
+/* CENTER / FINAL */
+.bracket-center .has-sides .match-card::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -24px;
+  width: 24px;
+  height: 2px;
+  background-color: var(--bracket-line-color);
+  transform: translateY(-50%);
+}
+
+.bracket-center .has-sides .match-card::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -24px;
+  width: 24px;
+  height: 2px;
+  background-color: var(--bracket-line-color);
+  transform: translateY(-50%);
+}
+
+/* ACTIVE LINE HIGHLIGHTING */
+:root {
+  --bracket-line-active: #34d399; /* emerald-400 */
+}
+
+/* Left & One-Sided: horizontal OUT */
+.left-side .bracket-column:not(:last-child) .match-wrapper.has-winner .match-card::after,
+.layout-onesided .bracket-column:not(:last-child) .match-wrapper.has-winner .match-card::after {
+  background-color: var(--bracket-line-active);
+  height: 3px;
+  z-index: 10;
+  box-shadow: 0 0 6px var(--bracket-line-active);
+}
+
+/* Left & One-Sided: vertical DOWN from top match */
+.left-side .bracket-column:not(:last-child) .match-wrapper.has-winner:nth-child(odd)::after,
+.layout-onesided .bracket-column:not(:last-child) .match-wrapper.has-winner:nth-child(odd)::after {
+  background-color: var(--bracket-line-active);
+  width: 3px;
+  z-index: 10;
+  box-shadow: 0 0 6px var(--bracket-line-active);
+}
+
+/* Left & One-Sided: vertical UP from bottom match */
+.left-side .bracket-column:not(:last-child) .match-wrapper.has-winner:nth-child(even)::after,
+.layout-onesided .bracket-column:not(:last-child) .match-wrapper.has-winner:nth-child(even)::after {
+  background-color: var(--bracket-line-active);
+  width: 3px;
+  z-index: 10;
+  box-shadow: 0 0 6px var(--bracket-line-active);
+}
+
+/* Left & One-Sided: horizontal IN to next match */
+.left-side .bracket-column:not(:first-child) .match-wrapper.has-advanced-team .match-card::before,
+.layout-onesided .bracket-column:not(:first-child) .match-wrapper.has-advanced-team .match-card::before {
+  background-color: var(--bracket-line-active);
+  height: 3px;
+  z-index: 10;
+  box-shadow: 0 0 6px var(--bracket-line-active);
+}
+
+/* Right Side: horizontal OUT */
+.right-side .bracket-column:not(:last-child) .match-wrapper.has-winner .match-card::before {
+  background-color: var(--bracket-line-active);
+  height: 3px;
+  z-index: 10;
+  box-shadow: 0 0 6px var(--bracket-line-active);
+}
+
+/* Right Side: vertical DOWN from top match */
+.right-side .bracket-column:not(:last-child) .match-wrapper.has-winner:nth-child(odd)::before {
+  background-color: var(--bracket-line-active);
+  width: 3px;
+  z-index: 10;
+  box-shadow: 0 0 6px var(--bracket-line-active);
+}
+
+/* Right Side: vertical UP from bottom match */
+.right-side .bracket-column:not(:last-child) .match-wrapper.has-winner:nth-child(even)::before {
+  background-color: var(--bracket-line-active);
+  width: 3px;
+  z-index: 10;
+  box-shadow: 0 0 6px var(--bracket-line-active);
+}
+
+/* Right Side: horizontal IN */
+.right-side .bracket-column:not(:first-child) .match-wrapper.has-advanced-team .match-card::after {
+  background-color: var(--bracket-line-active);
+  height: 3px;
+  z-index: 10;
+  box-shadow: 0 0 6px var(--bracket-line-active);
+}
+
+/* Center Final */
+.bracket-center .has-sides .match-wrapper.has-advanced-team-t1 .match-card::before {
+  background-color: var(--bracket-line-active);
+  height: 3px;
+  z-index: 10;
+  box-shadow: 0 0 6px var(--bracket-line-active);
+}
+.bracket-center .has-sides .match-wrapper.has-advanced-team-t2 .match-card::after {
+  background-color: var(--bracket-line-active);
+  height: 3px;
+  z-index: 10;
+  box-shadow: 0 0 6px var(--bracket-line-active);
+}
+
+/* Fix for semi-final connecting lines in 2-sided layout */
+.left-side .bracket-column:last-child .match-card::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -24px;
+  width: 24px;
+  height: 2px;
+  background-color: var(--bracket-line-color);
+  transform: translateY(-50%);
+}
+.right-side .bracket-column:last-child .match-card::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -24px;
+  width: 24px;
+  height: 2px;
+  background-color: var(--bracket-line-color);
+  transform: translateY(-50%);
+}
+
+/* Active fix for semi-final */
+.left-side .bracket-column:last-child .match-wrapper.has-winner .match-card::after {
+  background-color: var(--bracket-line-active);
+  height: 3px;
+  z-index: 10;
+  box-shadow: 0 0 6px var(--bracket-line-active);
+}
+.right-side .bracket-column:last-child .match-wrapper.has-winner .match-card::before {
+  background-color: var(--bracket-line-active);
+  height: 3px;
+  z-index: 10;
+  box-shadow: 0 0 6px var(--bracket-line-active);
+}
+
+/* Play-In Bracket Styling */
+.play-in-hidden {
+  visibility: hidden;
+}
+
+/* Left & One-Sided: Shift left */
+.left-side .play-in-shifted-wrapper > .match-card,
+.layout-onesided .play-in-shifted-wrapper > .match-card {
+  transform: translateX(-308px) !important;
+  z-index: 50; /* Ensure it stays on top */
+}
+.left-side .play-in-shifted-wrapper > .match-card::before,
+.layout-onesided .play-in-shifted-wrapper > .match-card::before {
+  display: none !important;
+}
+.left-side .play-in-shifted-wrapper > .match-card::after,
+.layout-onesided .play-in-shifted-wrapper > .match-card::after {
+  width: 332px !important;
+  right: -332px !important;
+}
+
+/* Right-Sided: Shift right */
+.right-side .play-in-shifted-wrapper > .match-card {
+  transform: translateX(308px) !important;
+  z-index: 50;
+}
+.right-side .play-in-shifted-wrapper > .match-card::after {
+  display: none !important;
+}
+.right-side .play-in-shifted-wrapper > .match-card::before {
+  width: 332px !important;
+  left: -332px !important;
+}
+
+@media print {
+  /* Force table formatting for print */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    page-break-inside: auto !important;
+  }
+  tr {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+    border-bottom: 1px solid #333 !important;
+  }
+  th, td {
+    border: 1px solid #333 !important;
+    padding: 8px !important;
+    color: black !important;
+    background-color: white !important;
+  }
+  th {
+    background-color: #e5e7eb !important;
+    text-align: center !important;
+  }
+  thead {
+    display: table-header-group !important;
+  }
+  
+  /* Remove gradients and shadows */
+  .bg-gradient-to-r, .bg-gradient-to-br, .shadow-xl, .shadow-lg, .shadow-sm {
+    background: none !important;
+    box-shadow: none !important;
+  }
+  
+  /* Make bracket backgrounds white and text black */
+  .match-card {
+    background-color: white !important;
+    border: none !important;
+  }
+  
+  .match-card select,
+  .match-card input,
+  .match-card span,
+  .match-card div {
+    background-color: transparent !important;
+    color: black !important;
+  }
+  
+  .match-card select,
+  .match-card input {
+    border: 1px solid #999 !important;
+  }
+  
+  .text-emerald-400, .text-amber-400, .text-blue-400, .text-rose-400 {
+    color: black !important;
+    font-weight: bold !important;
+  }
+  
+  /* Avoid breaking bracket elements across pages */
+  .bracket-column {
+    page-break-inside: avoid !important;
+  }
+
+  /* Specific adjustments for presentation Schedule view print */
+  .print-schedule-container {
+    position: static !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+  
+  /* Remove scrollbars from bracket workspace when printing */
+  .workspace {
+    overflow: visible !important;
+  }
+}
+
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
