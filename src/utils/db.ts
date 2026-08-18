@@ -21,7 +21,19 @@ export const getOrCreateTournament = async (
     if (data && data.length > 0) return tournamentId;
   }
 
-  // Create new tournament
+  // If no ID in localStorage (e.g. new visitor), always fetch the most recent tournament
+  const { data: recent } = await supabase
+    .from('tournaments')
+    .select('id')
+    .order('created_at', { ascending: false })
+    .limit(1);
+
+  if (recent && recent.length > 0) {
+    localStorage.setItem('mahap_tournament_id', recent[0].id);
+    return recent[0].id;
+  }
+
+  // Fallback ONLY if the database is 100% empty
   const { data, error } = await supabase
     .from('tournaments')
     .insert([{ title, bracket_size: bracketSize, layout_mode: layoutMode }])
@@ -33,7 +45,7 @@ export const getOrCreateTournament = async (
     throw new Error('Gagal membuat turnamen');
   }
 
-  // Ensure BYE team exists in this tournament to satisfy foreign key constraints
+  // Ensure BYE team exists in this tournament
   await supabase.from('teams').insert([{
     id: 'BYE',
     tournament_id: data.id,
