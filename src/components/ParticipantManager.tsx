@@ -101,47 +101,49 @@ export const ParticipantManager: React.FC<ParticipantManagerProps> = ({
   return (
     <div className="max-w-7xl mx-auto w-full p-4 sm:p-6 space-y-6 animate-fadeIn">
       {/* Top Stat Summary Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-        <div className="bg-slate-800/80 border border-slate-700/80 rounded-xl p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold">
-            <UserCheck size={20} />
+      {isAdmin && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          <div className="bg-slate-800/80 border border-slate-700/80 rounded-xl p-4 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold">
+              <UserCheck size={20} />
+            </div>
+            <div>
+              <div className="text-xs text-slate-400 font-semibold uppercase">Total Peserta</div>
+              <div className="text-xl font-bold text-slate-100">{teams.length} Tim</div>
+            </div>
           </div>
-          <div>
-            <div className="text-xs text-slate-400 font-semibold uppercase">Total Peserta</div>
-            <div className="text-xl font-bold text-slate-100">{teams.length} Tim</div>
-          </div>
-        </div>
 
-        <div className="bg-slate-800/80 border border-slate-700/80 rounded-xl p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold">
-            A
+          <div className="bg-slate-800/80 border border-slate-700/80 rounded-xl p-4 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold">
+              A
+            </div>
+            <div>
+              <div className="text-xs text-slate-400 font-semibold uppercase">Seeded A</div>
+              <div className="text-xl font-bold text-amber-400">{seededACount} Tim</div>
+            </div>
           </div>
-          <div>
-            <div className="text-xs text-slate-400 font-semibold uppercase">Seeded A</div>
-            <div className="text-xl font-bold text-amber-400">{seededACount} Tim</div>
-          </div>
-        </div>
 
-        <div className="bg-slate-800/80 border border-slate-700/80 rounded-xl p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold">
-            B
+          <div className="bg-slate-800/80 border border-slate-700/80 rounded-xl p-4 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold">
+              B
+            </div>
+            <div>
+              <div className="text-xs text-slate-400 font-semibold uppercase">Seeded B</div>
+              <div className="text-xl font-bold text-blue-400">{seededBCount} Tim</div>
+            </div>
           </div>
-          <div>
-            <div className="text-xs text-slate-400 font-semibold uppercase">Seeded B</div>
-            <div className="text-xl font-bold text-blue-400">{seededBCount} Tim</div>
-          </div>
-        </div>
 
-        <div className="bg-slate-800/80 border border-slate-700/80 rounded-xl p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-slate-700 border border-slate-600 flex items-center justify-center text-slate-300 font-bold">
-            N
-          </div>
-          <div>
-            <div className="text-xs text-slate-400 font-semibold uppercase">Non-Seeded</div>
-            <div className="text-xl font-bold text-slate-200">{nonSeededCount} Tim</div>
+          <div className="bg-slate-800/80 border border-slate-700/80 rounded-xl p-4 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-slate-700 border border-slate-600 flex items-center justify-center text-slate-300 font-bold">
+              N
+            </div>
+            <div>
+              <div className="text-xs text-slate-400 font-semibold uppercase">Non-Seeded</div>
+              <div className="text-xl font-bold text-slate-200">{nonSeededCount} Tim</div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main Grid: Form Left, List Right */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
