@@ -161,14 +161,14 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
               </button>
             )}
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="hidden sm:block text-xs text-slate-400 mt-1">
             Daftar partai pertandingan yang sudah memiliki tanggal pelaksanaan, pengaturan lapangan, dan catatan skor.
           </p>
         </div>
 
         <div className="flex items-center flex-wrap gap-2">
           {/* Search */}
-          <div className="relative">
+          <div className="hidden sm:block relative">
             <Search
               size={14}
               className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400"
@@ -183,7 +183,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
           </div>
 
           {/* Date Filter */}
-          <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-300">
+          <div className="hidden sm:flex items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-300">
             <Calendar size={13} className="text-amber-400" />
             <select
               value={dateFilter}
@@ -214,7 +214,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
           <button
             type="button"
             onClick={() => window.print()}
-            className="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer shadow"
+            className="hidden sm:flex px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg transition-colors items-center gap-1.5 cursor-pointer shadow"
           >
             <Printer size={14} /> Cetak Jadwal
           </button>
