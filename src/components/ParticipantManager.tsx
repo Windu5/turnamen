@@ -92,7 +92,7 @@ export const ParticipantManager: React.FC<ParticipantManagerProps> = ({
       (t.club && t.club.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchCat = filterCategory === 'all' || t.category === filterCategory;
     return matchSearch && matchCat;
-  });
+  }).sort((a, b) => a.name.localeCompare(b.name));
 
   const seededACount = teams.filter((t) => t.category === 'Seeded A').length;
   const seededBCount = teams.filter((t) => t.category === 'Seeded B').length;
