@@ -161,7 +161,10 @@ export const MatchCard: React.FC<MatchCardProps> = ({
             >
               <option value="" className="text-slate-200 bg-slate-900">-- Pilih Tim --</option>
               <option value="BYE" className="text-rose-400 bg-slate-900 font-bold">[ KOSONG / BYE ]</option>
-              {teams.filter(t => !usedTeamIds?.has(t.id) || (team && t.id === team.id)).map((t) => (
+              {teams
+                  .filter(t => !usedTeamIds?.has(t.id) || (team && t.id === team.id))
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map((t) => (
                 <option key={t.id} value={t.id} className="text-slate-200 bg-slate-900">
                   {t.name}
                 </option>
