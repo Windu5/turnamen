@@ -14,6 +14,7 @@ import { Team, CategoryType } from '../types';
 
 interface ParticipantManagerProps {
   teams: Team[];
+  isAdmin?: boolean;
   onAddTeam: (name: string, category: CategoryType, club?: string) => void;
   onUpdateTeam: (id: string, name: string, category: CategoryType, club?: string) => void;
   onDeleteTeam: (id: string) => void;
@@ -23,6 +24,7 @@ interface ParticipantManagerProps {
 
 export const ParticipantManager: React.FC<ParticipantManagerProps> = ({
   teams,
+  isAdmin = false,
   onAddTeam,
   onUpdateTeam,
   onDeleteTeam,
@@ -144,8 +146,9 @@ export const ParticipantManager: React.FC<ParticipantManagerProps> = ({
       {/* Main Grid: Form Left, List Right */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Panel: Form */}
-        <div className="lg:col-span-4 bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-lg space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-700 pb-3">
+        {isAdmin && (
+          <div className="lg:col-span-4 bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-lg space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-700 pb-3">
             <h2 className="text-base font-bold text-blue-400 uppercase tracking-wide flex items-center gap-2">
               {editingTeamId ? <Pencil size={18} /> : <Plus size={18} />}
               {editingTeamId ? 'Edit Peserta' : 'Tambah Peserta Baru'}
@@ -230,9 +233,10 @@ export const ParticipantManager: React.FC<ParticipantManagerProps> = ({
             </div>
           </form>
         </div>
+        )}
 
         {/* Right Panel: Team Table */}
-        <div className="lg:col-span-8 bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-lg flex flex-col min-h-[450px]">
+        <div className={`${isAdmin ? 'lg:col-span-8' : 'lg:col-span-12'} bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-lg flex flex-col min-h-[450px]`}>
           {/* Header Controls */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-700 pb-3 mb-4">
             <h2 className="text-base font-bold text-slate-200 uppercase tracking-wide">
@@ -267,7 +271,7 @@ export const ParticipantManager: React.FC<ParticipantManagerProps> = ({
                 <option value="Non-Seeded">Non-Seeded</option>
               </select>
 
-              {teams.length > 0 && (
+              {isAdmin && teams.length > 0 && (
                 <button
                   onClick={onClearAllTeams}
                   className="px-2.5 py-1.5 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-600/40 text-rose-300 text-xs font-semibold rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
@@ -294,7 +298,7 @@ export const ParticipantManager: React.FC<ParticipantManagerProps> = ({
                     <th className="py-2.5 px-3">Nama Pasangan / Tim</th>
                     <th className="py-2.5 px-3">Klub</th>
                     <th className="py-2.5 px-3 w-32">Kategori</th>
-                    <th className="py-2.5 px-3 text-center w-24">Aksi</th>
+                    {isAdmin && <th className="py-2.5 px-3 text-center w-24">Aksi</th>}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-700/50">
@@ -330,24 +334,26 @@ export const ParticipantManager: React.FC<ParticipantManagerProps> = ({
                             {team.category}
                           </span>
                         </td>
-                        <td className="py-2.5 px-3 text-center">
-                          <div className="flex items-center justify-center gap-1.5">
-                            <button
-                              onClick={() => handleEdit(team)}
-                              className="p-1.5 text-amber-400 hover:bg-amber-500/20 rounded transition-colors cursor-pointer"
-                              title="Edit"
-                            >
-                              <Pencil size={15} />
-                            </button>
-                            <button
-                              onClick={() => onDeleteTeam(team.id)}
-                              className="p-1.5 text-rose-400 hover:bg-rose-500/20 rounded transition-colors cursor-pointer"
-                              title="Hapus"
-                            >
-                              <Trash2 size={15} />
-                            </button>
-                          </div>
-                        </td>
+                        {isAdmin && (
+                          <td className="py-2.5 px-3 text-center">
+                            <div className="flex items-center justify-center gap-1.5">
+                              <button
+                                onClick={() => handleEdit(team)}
+                                className="p-1.5 text-amber-400 hover:bg-amber-500/20 rounded transition-colors cursor-pointer"
+                                title="Edit"
+                              >
+                                <Pencil size={15} />
+                              </button>
+                              <button
+                                onClick={() => onDeleteTeam(team.id)}
+                                className="p-1.5 text-rose-400 hover:bg-rose-500/20 rounded transition-colors cursor-pointer"
+                                title="Hapus"
+                              >
+                                <Trash2 size={15} />
+                              </button>
+                            </div>
+                          </td>
+                        )}
                       </tr>
                     );
                   })}

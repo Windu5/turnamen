@@ -127,32 +127,6 @@ export const Navigation: React.FC<NavigationProps> = ({
         
         {isMenuOpen && (
           <div className="absolute top-full right-0 mt-1 w-64 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col py-1">
-            {onOpenLiveDraw && (
-              <button
-                onClick={() => {
-                  if (isDrawLocked) return;
-                  onOpenLiveDraw();
-                  setIsMenuOpen(false);
-                }}
-                disabled={isDrawLocked}
-                className={`px-4 py-2.5 text-left text-sm font-semibold flex items-center gap-2 transition-colors ${
-                  isDrawLocked
-                    ? 'text-slate-500 cursor-not-allowed bg-slate-800'
-                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-amber-400 cursor-pointer'
-                }`}
-              >
-                <Shuffle size={16} /> Live Draw Bagan
-              </button>
-            )}
-            
-            {onAutoDistributeByes && (
-              <button
-                onClick={() => { onAutoDistributeByes(); setIsMenuOpen(false); }}
-                className="px-4 py-2.5 text-left text-sm font-semibold text-slate-300 hover:bg-slate-700/50 hover:text-emerald-400 flex items-center gap-2 cursor-pointer transition-colors"
-              >
-                <Sparkles size={16} /> Sebar BYE Otomatis
-              </button>
-            )}
             {onPrint && (
               <button
                 onClick={() => { onPrint(); setIsMenuOpen(false); }}
@@ -164,39 +138,6 @@ export const Navigation: React.FC<NavigationProps> = ({
 
             {isAdmin && (
               <>
-                <div className="h-px bg-slate-700/80 my-2 mx-2"></div>
-                {onOpenLiveDraw && (
-                  <button
-                    onClick={() => {
-                      if (isDrawLocked) return;
-                      onOpenLiveDraw();
-                      setIsMenuOpen(false);
-                    }}
-                    disabled={isDrawLocked}
-                    className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 font-semibold group transition-colors ${
-                      isDrawLocked
-                        ? 'text-slate-500 cursor-not-allowed'
-                        : 'text-slate-300 hover:bg-emerald-600/20 hover:text-emerald-400 cursor-pointer'
-                    }`}
-                  >
-                    <Dices size={16} className={isDrawLocked ? "text-slate-600" : "text-emerald-500 group-hover:scale-110 transition-transform"} />
-                    Live Draw <span className={`text-[10px] px-1.5 py-0.5 rounded-full ml-auto ${isDrawLocked ? 'bg-slate-700 text-slate-500' : 'bg-emerald-500/20 text-emerald-400'}`}>Pro</span>
-                  </button>
-                )}
-                {onAutoDistributeByes && (
-                  <button
-                    onClick={() => {
-                      onAutoDistributeByes();
-                      setIsMenuOpen(false);
-                    }}
-                    className="w-full text-left px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors flex items-center gap-3 cursor-pointer"
-                  >
-                    <Shuffle size={16} className="text-slate-400" />
-                    Sebar BYE Otomatis
-                  </button>
-                )}
-                
-                <div className="h-px bg-slate-700/80 my-2 mx-2"></div>
                 
                 {onExportJSON && (
                   <button

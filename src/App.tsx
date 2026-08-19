@@ -78,7 +78,12 @@ export default function App() {
     const tId = tournamentId || localStorage.getItem('mahap_tournament_id');
     if (tId) updateTournamentSettings(tId, { layout_mode: mode });
   };
-  const [zoomLevel, setZoomLevel] = useState<number>(1.0);
+  const [zoomLevel, setZoomLevel] = useState<number>(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 640 ? 0.6 : 0.7;
+    }
+    return 0.7;
+  });
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [isPresentationMode, setIsPresentationMode] = useState<boolean>(false);
   const [isHeaderNavHidden, setIsHeaderNavHidden] = useState<boolean>(false);
@@ -890,32 +895,12 @@ export default function App() {
         />
       )}
       
-      {/* Admin Smart Warning Banner */}
-      {isAdmin && !isPresentationMode && activeTab === 'bagan' && teams.length > 0 && (
-        <div className={`px-4 py-2 text-sm flex items-center justify-center gap-2 font-medium print:hidden ${
-          isDrawLocked 
-            ? 'bg-amber-500/20 text-amber-300 border-b border-amber-500/30' 
-            : 'bg-emerald-500/10 text-emerald-400 border-b border-emerald-500/20'
-        }`}>
-          {isDrawLocked ? (
-            <>
-              <AlertTriangle size={16} />
-              <span>Peringatan: Ukuran bagan ({bracketSize} slot) tidak sesuai dengan jumlah peserta ({teams.length} tim). Tombol undian dikunci, harap klik tombol 'Sesuaikan' di toolbar bagan!</span>
-            </>
-          ) : (
-            <>
-              <CheckCircle2 size={16} />
-              <span>Bagan sudah optimal ({bracketSize} slot untuk {teams.length} peserta).</span>
-            </>
-          )}
-        </div>
-      )}
-
       {/* Main Content Area */}
-      <main className={`flex-1 flex flex-col min-h-0 overflow-x-hidden ${activeTab !== 'bagan' && !isPresentationMode ? 'overflow-y-auto' : 'overflow-hidden'} ${isPresentationMode ? 'p-0' : 'p-3 sm:p-6'}`}>
-        {activeTab === 'peserta' && !isPresentationMode && isAdmin && (
-          <ParticipantManager
-            teams={teams}
+        <main className={`flex-1 flex flex-col min-h-0 overflow-x-hidden ${activeTab !== 'bagan' && !isPresentationMode ? 'overflow-y-auto' : 'overflow-hidden'} ${isPresentationMode ? 'p-0' : 'p-3 sm:p-6'}`}>
+          {activeTab === 'peserta' && !isPresentationMode && (
+            <ParticipantManager
+              teams={teams}
+              isAdmin={isAdmin}
             onAddTeam={handleAddTeam}
             onUpdateTeam={handleUpdateTeam}
             onDeleteTeam={handleDeleteTeam}
@@ -949,9 +934,12 @@ export default function App() {
                         onChangeZoom={(delta) =>
                           setZoomLevel((prev) => Math.min(2.0, Math.max(0.3, prev + delta)))
                         }
-                        onFitToScreen={() => calculateFitToScreen()}
-                        onResetZoom={() => setZoomLevel(1.0)}
-                        totalRounds={rounds.length}
+                          onFitToScreen={() => calculateFitToScreen()}
+                          onResetZoom={() => {
+                            const isMobile = window.innerWidth < 640;
+                            setZoomLevel(isMobile ? 0.6 : 0.7);
+                          }}
+                          totalRounds={rounds.length}
                         activeFilter={activeFilter}
                         onChangeFilter={setActiveFilter}
                         onOpenManualDraw={isAdmin ? () => setIsManualDrawOpen(true) : undefined}
@@ -979,9 +967,12 @@ export default function App() {
                 onChangeZoom={(delta) =>
                   setZoomLevel((prev) => Math.min(2.0, Math.max(0.3, prev + delta)))
                 }
-                onFitToScreen={() => calculateFitToScreen()}
-                onResetZoom={() => setZoomLevel(1.0)}
-                totalRounds={rounds.length}
+                  onFitToScreen={() => calculateFitToScreen()}
+                  onResetZoom={() => {
+                    const isMobile = window.innerWidth < 640;
+                    setZoomLevel(isMobile ? 0.6 : 0.7);
+                  }}
+                  totalRounds={rounds.length}
                 activeFilter={activeFilter}
                 onChangeFilter={setActiveFilter}
                 onOpenManualDraw={isAdmin ? () => setIsManualDrawOpen(true) : undefined}
