@@ -77,8 +77,17 @@ export const BracketToolbar: React.FC<BracketToolbarProps> = ({
   isAdmin,
   isDrawLocked = false,
 }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefreshClick = () => {
+    if (onRefresh) {
+      setIsRefreshing(true);
+      onRefresh();
+      setTimeout(() => setIsRefreshing(false), 800);
+    }
+  };
 
   return (
     <div className="relative z-20 print:hidden mb-4">
@@ -119,11 +128,11 @@ export const BracketToolbar: React.FC<BracketToolbarProps> = ({
               {onRefresh && (
                 <button
                   type="button"
-                  onClick={onRefresh}
+                  onClick={handleRefreshClick}
                   className="sm:hidden px-2 py-1 bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-400 rounded transition-colors flex items-center justify-center cursor-pointer"
                   title="Refresh Skema"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                  <svg className={`${isRefreshing ? 'animate-spin text-white' : ''} transition-colors`} xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
                 </button>
               )}
               {!isPresentationMode && onTogglePresentation && (

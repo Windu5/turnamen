@@ -23,6 +23,7 @@ interface ScheduleViewProps {
     field: 'date' | 'court' | 'matchNum',
     val: string
   ) => void;
+  onRefresh?: () => void;
   isAdmin?: boolean;
 }
 
@@ -38,6 +39,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
   teams,
   onUpdateScore,
   onUpdateSchedule,
+  onRefresh,
   isAdmin,
 }) => {
   const [selectedCourt, setSelectedCourt] = useState('all');
@@ -46,6 +48,15 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
   const [editingScoreId, setEditingScoreId] = useState<string | null>(null);
   const [scoreInput1, setScoreInput1] = useState('');
   const [scoreInput2, setScoreInput2] = useState('');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefreshClick = () => {
+    if (onRefresh) {
+      setIsRefreshing(true);
+      onRefresh();
+      setTimeout(() => setIsRefreshing(false), 800);
+    }
+  };
 
   const totalRounds = rounds.length;
 
@@ -134,11 +145,23 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
       {/* Top Filter Bar */}
       <div className="bg-slate-800 border border-slate-700 rounded-xl p-4 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-            <Calendar className="text-amber-400" size={20} />
-            Jadwal & Hasil Pertandingan ({filteredMatches.length})
-          </h2>
-          <p className="text-xs text-slate-400">
+          <div className="flex items-center gap-3">
+            <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
+              <Calendar className="text-amber-400" size={20} />
+              Jadwal & Hasil Pertandingan ({filteredMatches.length})
+            </h2>
+            {onRefresh && (
+              <button
+                type="button"
+                onClick={handleRefreshClick}
+                className="px-2 py-1 bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-400 rounded transition-colors flex items-center justify-center cursor-pointer"
+                title="Refresh Jadwal"
+              >
+                <svg className={`${isRefreshing ? 'animate-spin text-white' : ''} transition-colors`} xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              </button>
+            )}
+          </div>
+          <p className="text-xs text-slate-400 mt-1">
             Daftar partai pertandingan yang sudah memiliki tanggal pelaksanaan, pengaturan lapangan, dan catatan skor.
           </p>
         </div>

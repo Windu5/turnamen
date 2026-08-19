@@ -1021,6 +1021,7 @@ export default function App() {
                       teams={teams}
                       onUpdateScore={isAdmin ? handleUpdateScore : undefined}
                       onUpdateSchedule={isAdmin ? handleUpdateSchedule : undefined}
+                      onRefresh={() => loadTournamentData(true)}
                       isAdmin={isAdmin}
                     />
                   </div>
@@ -1035,6 +1036,7 @@ export default function App() {
             teams={teams}
             onUpdateScore={isAdmin ? handleUpdateScore : undefined}
             onUpdateSchedule={isAdmin ? handleUpdateSchedule : undefined}
+            onRefresh={() => loadTournamentData(true)}
             isAdmin={isAdmin}
           />
         )}
