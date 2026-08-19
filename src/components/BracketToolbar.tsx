@@ -31,6 +31,7 @@ interface BracketToolbarProps {
   zoomLevel: number;
   onChangeZoom: (delta: number) => void;
   onFitToScreen: () => void;
+  onRefresh?: () => void;
   onResetZoom: () => void;
   onOpenManualDraw: () => void;
   totalRounds: number;
@@ -58,6 +59,7 @@ export const BracketToolbar: React.FC<BracketToolbarProps> = ({
   zoomLevel,
   onChangeZoom,
   onFitToScreen,
+  onRefresh,
   onResetZoom,
   onOpenManualDraw,
   totalRounds,
@@ -114,11 +116,21 @@ export const BracketToolbar: React.FC<BracketToolbarProps> = ({
             )}
 
             <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-700">
+              {onRefresh && (
+                <button
+                  type="button"
+                  onClick={onRefresh}
+                  className="sm:hidden px-2 py-1 bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-400 rounded transition-colors flex items-center justify-center cursor-pointer"
+                  title="Refresh Skema"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+              )}
               {!isPresentationMode && onTogglePresentation && (
                 <button
                   type="button"
                   onClick={onTogglePresentation}
-                  className="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors flex items-center justify-center cursor-pointer"
+                  className="hidden sm:flex px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors flex items-center justify-center cursor-pointer"
                   title="Masuk Mode Presentasi"
                 >
                   <PlaySquare size={14} />
@@ -127,7 +139,7 @@ export const BracketToolbar: React.FC<BracketToolbarProps> = ({
               <button
                 type="button"
                 onClick={onFitToScreen}
-                className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer"
+                className="hidden sm:flex px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer"
                 title="Sesuai Ukuran Layar"
               >
                 <Maximize2 size={13} />
@@ -159,7 +171,7 @@ export const BracketToolbar: React.FC<BracketToolbarProps> = ({
                 <button
                   type="button"
                   onClick={onTogglePresentation}
-                  className="px-2 py-1 bg-rose-600 hover:bg-rose-500 text-white rounded transition-colors flex items-center justify-center cursor-pointer ml-1"
+                  className="hidden sm:flex px-2 py-1 bg-rose-600 hover:bg-rose-500 text-white rounded transition-colors flex items-center justify-center cursor-pointer ml-1"
                   title="Keluar Mode Presentasi"
                 >
                   <X size={14} />

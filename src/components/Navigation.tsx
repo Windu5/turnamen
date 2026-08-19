@@ -139,33 +139,6 @@ export const Navigation: React.FC<NavigationProps> = ({
             {isAdmin && (
               <>
                 
-                {onExportJSON && (
-                  <button
-                    onClick={() => {
-                      onExportJSON();
-                      setIsMenuOpen(false);
-                    }}
-                    className="w-full text-left px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors flex items-center gap-3 cursor-pointer"
-                  >
-                    <Download size={16} className="text-slate-400" />
-                    Export Data (JSON)
-                  </button>
-                )}
-                {onImportJSON && (
-                  <label className="w-full text-left px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors flex items-center gap-3 cursor-pointer">
-                    <Upload size={16} className="text-slate-400" />
-                    Import Data (JSON)
-                    <input
-                      type="file"
-                      accept=".json"
-                      onChange={(e) => {
-                        onImportJSON(e);
-                        setIsMenuOpen(false);
-                      }}
-                      className="hidden"
-                    />
-                  </label>
-                )}
                 {onExportCSV && (
                   <button
                     onClick={() => {

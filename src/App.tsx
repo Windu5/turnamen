@@ -123,78 +123,81 @@ export default function App() {
     action: () => {},
   });
 
-  // Load state from Supabase on mount
-  useEffect(() => {
-    const initDb = async () => {
-      setIsLoading(true);
-      try {
-        const tId = await getOrCreateTournament('MAHAP OPEN 2026', 8, 'two-sided');
-        setTournamentId(tId);
-        
-        const data = await fetchTournamentData(tId);
-        if (data.tournament) {
-          setTournamentTitle(data.tournament.title);
-          setBracketSizeState(data.tournament.bracket_size);
-          setLayoutModeState(data.tournament.layout_mode);
-          if (data.tournament.pin) {
-            setTournamentPin(data.tournament.pin);
-          }
-          
-          // Restore admin state
-          const adminTournaments = JSON.parse(localStorage.getItem('admin_tournaments') || '[]');
-          if (adminTournaments.includes(tId)) {
-            setIsAdmin(true);
-          }
+  // Load state from Supabase
+  const loadTournamentData = async (silent = false) => {
+    if (!silent) setIsLoading(true);
+    try {
+      const tId = await getOrCreateTournament('MAHAP OPEN 2026', 8, 'two-sided');
+      setTournamentId(tId);
+      
+      const data = await fetchTournamentData(tId);
+      if (data.tournament) {
+        setTournamentTitle(data.tournament.title);
+        setBracketSizeState(data.tournament.bracket_size);
+        setLayoutModeState(data.tournament.layout_mode);
+        if (data.tournament.pin) {
+          setTournamentPin(data.tournament.pin);
         }
-        if (data.teams && data.teams.length > 0) {
-          setTeams(data.teams.filter((t: any) => t.id !== 'BYE'));
-        } else {
-          setTeams(DEFAULT_TEAMS);
-          // Sync default teams to DB
+        
+        // Restore admin state
+        const adminTournaments = JSON.parse(localStorage.getItem('admin_tournaments') || '[]');
+        if (adminTournaments.includes(tId)) {
+          setIsAdmin(true);
+        }
+      }
+      if (data.teams && data.teams.length > 0) {
+        setTeams(data.teams.filter((t: any) => t.id !== 'BYE'));
+      } else {
+        setTeams(DEFAULT_TEAMS);
+        // Sync default teams to DB
+        if (!silent) {
           for (const t of DEFAULT_TEAMS) {
             await saveTeam(tId, t);
           }
         }
-        
-        if (data.matches && data.matches.length > 0) {
-          // rebuild rounds from flat matches
-          const bSize = data.tournament?.bracket_size || 8;
-          const builtRounds = createEmptyBracketRounds(bSize);
-          
-          data.matches.forEach((m: any) => {
-            if (builtRounds[m.round_index] && builtRounds[m.round_index][m.match_index]) {
-              builtRounds[m.round_index][m.match_index] = {
-                ...builtRounds[m.round_index][m.match_index],
-                id: m.id,
-                t1: m.t1_id ? data.teams.find((t: any) => t.id === m.t1_id) || (m.t1_id === 'BYE' ? BYE_TEAM : null) : null,
-                t2: m.t2_id ? data.teams.find((t: any) => t.id === m.t2_id) || (m.t2_id === 'BYE' ? BYE_TEAM : null) : null,
-                winner: m.winner_id ? data.teams.find((t: any) => t.id === m.winner_id) || (m.winner_id === 'BYE' ? BYE_TEAM : null) : null,
-                loser: m.loser_id ? data.teams.find((t: any) => t.id === m.loser_id) || (m.loser_id === 'BYE' ? BYE_TEAM : null) : null,
-                score1: m.score1 || '',
-                score2: m.score2 || '',
-                schedule: {
-                  date: m.schedule_date || '',
-                  court: m.schedule_court || '',
-                  matchNum: m.schedule_match_num || ''
-                }
-              };
-            }
-          });
-          setRounds(builtRounds);
-        } else {
-          // Jika tidak ada data match di DB, tetap buat bagan kosong sesuai bracket_size yang tersimpan
-          const bSize = data.tournament?.bracket_size || 8;
-          setRounds(createEmptyBracketRounds(bSize));
-        }
-        
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Failed to init DB:', error);
-      } finally {
-        setIsLoading(false);
       }
-    };
-    initDb();
+      
+      if (data.matches && data.matches.length > 0) {
+        // rebuild rounds from flat matches
+        const bSize = data.tournament?.bracket_size || 8;
+        const builtRounds = createEmptyBracketRounds(bSize);
+        
+        data.matches.forEach((m: any) => {
+          if (builtRounds[m.round_index] && builtRounds[m.round_index][m.match_index]) {
+            builtRounds[m.round_index][m.match_index] = {
+              ...builtRounds[m.round_index][m.match_index],
+              id: m.id,
+              t1: m.t1_id ? data.teams.find((t: any) => t.id === m.t1_id) || (m.t1_id === 'BYE' ? BYE_TEAM : null) : null,
+              t2: m.t2_id ? data.teams.find((t: any) => t.id === m.t2_id) || (m.t2_id === 'BYE' ? BYE_TEAM : null) : null,
+              winner: m.winner_id ? data.teams.find((t: any) => t.id === m.winner_id) || (m.winner_id === 'BYE' ? BYE_TEAM : null) : null,
+              loser: m.loser_id ? data.teams.find((t: any) => t.id === m.loser_id) || (m.loser_id === 'BYE' ? BYE_TEAM : null) : null,
+              score1: m.score1 || '',
+              score2: m.score2 || '',
+              schedule: {
+                date: m.schedule_date || '',
+                court: m.schedule_court || '',
+                matchNum: m.schedule_match_num || ''
+              }
+            };
+          }
+        });
+        setRounds(builtRounds);
+      } else {
+        // Jika tidak ada data match di DB, tetap buat bagan kosong sesuai bracket_size yang tersimpan
+        const bSize = data.tournament?.bracket_size || 8;
+        setRounds(createEmptyBracketRounds(bSize));
+      }
+      
+    } catch (error) {
+      console.error('Failed to init DB:', error);
+    } finally {
+      if (!silent) setIsLoading(false);
+    }
+  };
+
+  // Load state from Supabase on mount
+  useEffect(() => {
+    loadTournamentData();
   }, []);
 
   // Listen to Fullscreen Change Events
@@ -940,7 +943,8 @@ export default function App() {
                             setZoomLevel(isMobile ? 0.6 : 0.7);
                           }}
                           totalRounds={rounds.length}
-                        activeFilter={activeFilter}
+                          onRefresh={() => loadTournamentData(true)}
+                          activeFilter={activeFilter}
                         onChangeFilter={setActiveFilter}
                         onOpenManualDraw={isAdmin ? () => setIsManualDrawOpen(true) : undefined}
                         onRequestResetBracket={isAdmin ? handleResetBracket : undefined}
@@ -973,7 +977,8 @@ export default function App() {
                     setZoomLevel(isMobile ? 0.6 : 0.7);
                   }}
                   totalRounds={rounds.length}
-                activeFilter={activeFilter}
+                  onRefresh={() => loadTournamentData(true)}
+                  activeFilter={activeFilter}
                 onChangeFilter={setActiveFilter}
                 onOpenManualDraw={isAdmin ? () => setIsManualDrawOpen(true) : undefined}
                 onRequestResetBracket={isAdmin ? handleResetBracket : undefined}
