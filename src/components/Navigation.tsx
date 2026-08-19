@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Users, Trophy, Calendar, MoreVertical, PlaySquare, Shuffle, Dices, Printer, Download, Upload, Trash2, Sparkles } from 'lucide-react';
+import { Users, Trophy, Calendar, MoreVertical, PlaySquare, Shuffle, Dices, Printer, Download, Upload, Trash2, Sparkles, Lock, Unlock } from 'lucide-react';
 
 export type TabType = 'peserta' | 'bagan' | 'jadwal';
 
@@ -19,6 +19,8 @@ interface NavigationProps {
   onOpenLogin?: () => void;
   onLogout?: () => void;
   isDrawLocked?: boolean;
+  isAdminLockEnabled?: boolean;
+  onToggleAdminLock?: () => void;
 }
 
 export const Navigation: React.FC<NavigationProps> = ({
@@ -37,6 +39,8 @@ export const Navigation: React.FC<NavigationProps> = ({
   onOpenLogin,
   onLogout,
   isDrawLocked = false,
+  isAdminLockEnabled = false,
+  onToggleAdminLock,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -57,23 +61,18 @@ export const Navigation: React.FC<NavigationProps> = ({
   return (
     <nav className="bg-slate-800 border-b border-slate-700/80 px-4 sm:px-8 flex justify-between overflow-visible print:hidden">
       <div className="flex gap-2 sm:gap-4 overflow-x-auto">
-        {isAdmin && (
-          <button
-            type="button"
-            onClick={() => onSelectTab('peserta')}
-            className={`py-3 px-4 font-semibold text-sm border-b-2 transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
-              activeTab === 'peserta'
-                ? 'border-blue-500 text-blue-400 bg-slate-800/80'
-                : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-700/30'
-            }`}
-          >
-            <Users size={18} />
-            <span>Kelola Peserta</span>
-            <span className="px-2 py-0.5 text-xs bg-slate-900 border border-slate-700 rounded-full font-bold text-slate-300">
-              {teamCount}
-            </span>
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={() => onSelectTab('peserta')}
+          className={`py-3 px-4 font-semibold text-sm border-b-2 transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+            activeTab === 'peserta'
+              ? 'border-blue-500 text-blue-400 bg-slate-800/80'
+              : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-700/30'
+          }`}
+        >
+          <Users size={18} />
+          <span>TIM</span>
+        </button>
 
         <button
           type="button"
@@ -98,11 +97,25 @@ export const Navigation: React.FC<NavigationProps> = ({
           }`}
         >
           <Calendar size={18} />
-          <span>Jadwal & Hasil</span>
+          <span>JADWAL</span>
         </button>
       </div>
 
       <div className="flex items-center ml-4 relative" ref={menuRef}>
+        {isAdmin && onToggleAdminLock && (
+          <button
+            type="button"
+            onClick={onToggleAdminLock}
+            className={`p-2 rounded-lg transition-colors cursor-pointer mr-1 ${
+              isAdminLockEnabled 
+                ? 'text-amber-400 bg-amber-500/10 hover:bg-amber-500/20' 
+                : 'text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20'
+            }`}
+            title={isAdminLockEnabled ? 'Buka Kunci Skema' : 'Kunci Skema'}
+          >
+            {isAdminLockEnabled ? <Lock size={20} /> : <Unlock size={20} />}
+          </button>
+        )}
         <button
           type="button"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -114,7 +127,32 @@ export const Navigation: React.FC<NavigationProps> = ({
         
         {isMenuOpen && (
           <div className="absolute top-full right-0 mt-1 w-64 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col py-1">
-
+            {onOpenLiveDraw && (
+              <button
+                onClick={() => {
+                  if (isDrawLocked) return;
+                  onOpenLiveDraw();
+                  setIsMenuOpen(false);
+                }}
+                disabled={isDrawLocked}
+                className={`px-4 py-2.5 text-left text-sm font-semibold flex items-center gap-2 transition-colors ${
+                  isDrawLocked
+                    ? 'text-slate-500 cursor-not-allowed bg-slate-800'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-amber-400 cursor-pointer'
+                }`}
+              >
+                <Shuffle size={16} /> Live Draw Bagan
+              </button>
+            )}
+            
+            {onAutoDistributeByes && (
+              <button
+                onClick={() => { onAutoDistributeByes(); setIsMenuOpen(false); }}
+                className="px-4 py-2.5 text-left text-sm font-semibold text-slate-300 hover:bg-slate-700/50 hover:text-emerald-400 flex items-center gap-2 cursor-pointer transition-colors"
+              >
+                <Sparkles size={16} /> Sebar BYE Otomatis
+              </button>
+            )}
             {onPrint && (
               <button
                 onClick={() => { onPrint(); setIsMenuOpen(false); }}
@@ -126,6 +164,38 @@ export const Navigation: React.FC<NavigationProps> = ({
 
             {isAdmin && (
               <>
+                <div className="h-px bg-slate-700/80 my-2 mx-2"></div>
+                {onOpenLiveDraw && (
+                  <button
+                    onClick={() => {
+                      if (isDrawLocked) return;
+                      onOpenLiveDraw();
+                      setIsMenuOpen(false);
+                    }}
+                    disabled={isDrawLocked}
+                    className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 font-semibold group transition-colors ${
+                      isDrawLocked
+                        ? 'text-slate-500 cursor-not-allowed'
+                        : 'text-slate-300 hover:bg-emerald-600/20 hover:text-emerald-400 cursor-pointer'
+                    }`}
+                  >
+                    <Dices size={16} className={isDrawLocked ? "text-slate-600" : "text-emerald-500 group-hover:scale-110 transition-transform"} />
+                    Live Draw <span className={`text-[10px] px-1.5 py-0.5 rounded-full ml-auto ${isDrawLocked ? 'bg-slate-700 text-slate-500' : 'bg-emerald-500/20 text-emerald-400'}`}>Pro</span>
+                  </button>
+                )}
+                {onAutoDistributeByes && (
+                  <button
+                    onClick={() => {
+                      onAutoDistributeByes();
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors flex items-center gap-3 cursor-pointer"
+                  >
+                    <Shuffle size={16} className="text-slate-400" />
+                    Sebar BYE Otomatis
+                  </button>
+                )}
+                
                 <div className="h-px bg-slate-700/80 my-2 mx-2"></div>
                 
                 {onExportJSON && (

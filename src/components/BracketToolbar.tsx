@@ -263,7 +263,7 @@ export const BracketToolbar: React.FC<BracketToolbarProps> = ({
                 <button
                   type="button"
                   onClick={onSaveBracket}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow-md transition-colors cursor-pointer"
+                  className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg shadow-md transition-colors ${isDrawLocked ? 'bg-emerald-800/50 text-slate-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer'}`}
                   title="Simpan Bagan ke Database"
                 >
                   <Save size={14} />
