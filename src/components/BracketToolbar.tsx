@@ -220,7 +220,12 @@ export const BracketToolbar: React.FC<BracketToolbarProps> = ({
                 <select
                   value={bracketSize}
                   onChange={(e) => onUpdateBracketSize(parseInt(e.target.value) || 8)}
-                  className="w-14 bg-slate-800 text-slate-100 font-bold px-1.5 py-0.5 rounded border border-slate-600 outline-none text-center cursor-pointer"
+                  disabled={isDrawLocked}
+                  className={`w-14 font-bold px-1.5 py-0.5 rounded border outline-none text-center ${
+                    isDrawLocked
+                      ? 'bg-slate-800/50 text-slate-500 border-slate-700/50 cursor-not-allowed'
+                      : 'bg-slate-800 text-slate-100 border-slate-600 cursor-pointer'
+                  }`}
                 >
                   <option value={4}>4</option>
                   <option value={8}>8</option>
