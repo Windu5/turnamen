@@ -9,6 +9,8 @@ import {
   Printer,
   Edit2,
   Check,
+  ZoomIn,
+  ZoomOut,
 } from 'lucide-react';
 import { Match, Team } from '../types';
 import { getRoundName } from '../utils/bracketUtils';
@@ -55,6 +57,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
   const [scoreInput1, setScoreInput1] = useState('');
   const [scoreInput2, setScoreInput2] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(() => (window.innerWidth < 640 ? 0.6 : 1.0));
 
   const handleRefreshClick = () => {
     if (onRefresh) {
@@ -200,6 +203,35 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
             </select>
           </div>
 
+          {/* Zoom Controls */}
+          <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-700">
+            <button
+              type="button"
+              onClick={() => setZoomLevel((prev) => Math.max(0.3, prev - 0.1))}
+              className="w-7 h-7 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded flex items-center justify-center transition-colors cursor-pointer"
+            >
+              <ZoomOut size={13} />
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                const isMobile = window.innerWidth < 640;
+                setZoomLevel(isMobile ? 0.6 : 1.0);
+              }}
+              className="px-1.5 py-1 hover:text-white text-slate-300 rounded text-xs font-bold transition-colors cursor-pointer min-w-[36px] text-center"
+              title="Reset Zoom"
+            >
+              {Math.round(zoomLevel * 100)}%
+            </button>
+            <button
+              type="button"
+              onClick={() => setZoomLevel((prev) => Math.min(2.0, prev + 0.1))}
+              className="w-7 h-7 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded flex items-center justify-center transition-colors cursor-pointer"
+            >
+              <ZoomIn size={13} />
+            </button>
+          </div>
+
           {onRefresh && (
             <button
               type="button"
@@ -232,9 +264,13 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse text-xs sm:text-sm">
-              <thead>
+          <div className="overflow-x-auto relative min-h-[300px]">
+            <div 
+              className="origin-top-left transition-transform duration-300 inline-block min-w-full"
+              style={{ transform: `scale(${zoomLevel})`, width: `${100 / zoomLevel}%` }}
+            >
+              <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                <thead>
                 <tr className="bg-slate-900 text-slate-400 uppercase text-[11px] font-bold border-b border-slate-700">
                   <th className="py-3 px-4">Tanggal</th>
                   <th className="py-3 px-4 w-16 text-center">Partai</th>
@@ -339,6 +375,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                 })}
               </tbody>
             </table>
+            </div>
           </div>
         )}
       </div>
