@@ -992,7 +992,7 @@ export default function App() {
               />
             )}
 
-            <div className={`flex-1 min-h-0 relative ${isPresentationMode ? 'bg-slate-950 flex flex-col' : 'bg-slate-950 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden'}`}>
+            <div className={`flex-1 min-h-0 relative ${isPresentationMode ? 'bg-slate-950 flex flex-col' : 'bg-slate-950 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden print:border-none print:shadow-none print:rounded-none'}`}>
                 {activeTab === 'bagan' && (
                   <>
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
