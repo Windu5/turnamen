@@ -1018,6 +1018,7 @@ export default function App() {
                 activeTab={activeTab}
                 onChangeTab={(tab) => setActiveTab(tab)}
                 isAdmin={isAdmin}
+                isDrawLocked={isGlobalLocked}
               />
             )}
 
