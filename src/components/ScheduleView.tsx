@@ -42,9 +42,15 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
   onRefresh,
   isAdmin,
 }) => {
-  const [selectedCourt, setSelectedCourt] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [dateFilter, setDateFilter] = useState<'hasDate' | 'all'>('hasDate');
+  const [selectedDate, setSelectedDate] = useState<string>(() => {
+    // Return today's date in YYYY-MM-DD format (local timezone)
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  });
   const [editingScoreId, setEditingScoreId] = useState<string | null>(null);
   const [scoreInput1, setScoreInput1] = useState('');
   const [scoreInput2, setScoreInput2] = useState('');
@@ -76,14 +82,13 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
     });
   });
 
+  // Get all unique dates from matches
+  const availableDates = Array.from(
+    new Set(allMatches.map(m => m.match.schedule.date).filter(Boolean))
+  ).sort() as string[];
+
   // Filter matches
   const filteredMatches = allMatches.filter(({ match, roundName }) => {
-    // Filter by date input if dateFilter is 'hasDate'
-    const hasDateInput = Boolean(match.schedule.date && match.schedule.date.trim() !== '');
-    if (dateFilter === 'hasDate' && !hasDateInput) {
-      return false;
-    }
-
     const t1Name = match.t1 ? match.t1.name : '';
     const t2Name = match.t2 ? match.t2.name : '';
     const query = searchQuery.toLowerCase();
@@ -94,10 +99,10 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
       roundName.toLowerCase().includes(query) ||
       (match.schedule.court && match.schedule.court.toLowerCase().includes(query));
 
-    const matchCourt =
-      selectedCourt === 'all' || match.schedule.court === selectedCourt;
+    const matchDate =
+      selectedDate === 'all' || match.schedule.date === selectedDate;
 
-    return matchQuery && matchCourt;
+    return matchQuery && matchDate;
   });
 
   // Sort: 1. Date, 2. Match Num, 3. Court
@@ -173,31 +178,25 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
           </div>
 
           {/* Date Filter */}
-          <div className="hidden sm:flex items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-300">
+          <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-300">
             <Calendar size={13} className="text-amber-400" />
             <select
-              value={dateFilter}
-              onChange={(e) => setDateFilter(e.target.value as 'hasDate' | 'all')}
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
               className="bg-transparent outline-none text-slate-100 cursor-pointer"
             >
-              <option value="hasDate" className="bg-slate-900">Hanya Ber-Tanggal</option>
-              <option value="all" className="bg-slate-900">Semua Pertandingan</option>
-            </select>
-          </div>
-
-          {/* Court Filter */}
-          <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-300">
-            <Filter size={13} className="text-amber-400" />
-            <select
-              value={selectedCourt}
-              onChange={(e) => setSelectedCourt(e.target.value)}
-              className="bg-transparent outline-none text-slate-100 cursor-pointer"
-            >
-              <option value="all" className="bg-slate-900">Semua Lapangan</option>
-              <option value="Lap 1" className="bg-slate-900">Lap 1</option>
-              <option value="Lap 2" className="bg-slate-900">Lap 2</option>
-              <option value="Lap 3" className="bg-slate-900">Lap 3</option>
-              <option value="Lap 4" className="bg-slate-900">Lap 4</option>
+              <option value="all" className="bg-slate-900">Semua Tanggal</option>
+              {availableDates.map(date => (
+                <option key={date} value={date} className="bg-slate-900">
+                  {formatDate(date)}
+                </option>
+              ))}
+              {/* Ensure today's date is an option if it's not in availableDates but selected */}
+              {!availableDates.includes(selectedDate) && selectedDate !== 'all' && (
+                <option value={selectedDate} className="bg-slate-900">
+                  {formatDate(selectedDate)} (Hari Ini)
+                </option>
+              )}
             </select>
           </div>
 
@@ -229,9 +228,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
             <Calendar size={36} className="mx-auto text-slate-600 mb-2" />
             <p className="font-semibold text-slate-300">Belum ada jadwal pertandingan yang dapat ditampilkan.</p>
             <p className="text-xs text-slate-500 max-w-md mx-auto">
-              {dateFilter === 'hasDate'
-                ? 'Silakan isi tanggal pertandingan pada bagan pertandingan agar daftar jadwal muncul di sini, atau ganti filter ke "Semua Pertandingan".'
-                : 'Tidak ada pertandingan yang sesuai dengan kriteria pencarian atau filter Anda.'}
+              Tidak ada pertandingan yang dijadwalkan pada {selectedDate !== 'all' ? 'tanggal ini' : 'kriteria ini'}. Silakan ganti filter tanggal atau kata kunci pencarian.
             </p>
           </div>
         ) : (

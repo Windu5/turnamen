@@ -233,7 +233,12 @@ export const BracketToolbar: React.FC<BracketToolbarProps> = ({
                   <button
                     type="button"
                     onClick={onAutoSizeBracket}
-                    className="p-1 bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-400 font-bold rounded transition-colors flex items-center cursor-pointer ml-1 border border-indigo-500/30"
+                    disabled={isDrawLocked}
+                    className={`p-1 font-bold rounded transition-colors flex items-center ml-1 border ${
+                      isDrawLocked
+                        ? 'bg-slate-800/50 border-slate-700/50 text-slate-500 cursor-not-allowed'
+                        : 'bg-indigo-600/20 hover:bg-indigo-600/40 border-indigo-500/30 text-indigo-400 cursor-pointer'
+                    }`}
                     title="Sesuaikan dengan Jumlah Tim"
                   >
                     <Wand2 size={16} />
@@ -242,7 +247,12 @@ export const BracketToolbar: React.FC<BracketToolbarProps> = ({
                 <button
                   type="button"
                   onClick={onCreateEmptyBracket}
-                  className="p-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded transition-colors flex items-center cursor-pointer ml-1"
+                  disabled={isDrawLocked}
+                  className={`p-1 font-bold rounded transition-colors flex items-center ml-1 ${
+                      isDrawLocked
+                        ? 'bg-slate-800/50 text-slate-500 cursor-not-allowed'
+                        : 'bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer'
+                  }`}
                   title="Buat Bagan Baru"
                 >
                   <Plus size={16} />
@@ -252,7 +262,12 @@ export const BracketToolbar: React.FC<BracketToolbarProps> = ({
               <button
                 type="button"
                 onClick={onRequestResetBracket}
-                className="p-1.5 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-600/40 text-rose-300 rounded-lg transition-colors cursor-pointer"
+                disabled={isDrawLocked}
+                className={`p-1.5 border rounded-lg transition-colors ${
+                  isDrawLocked
+                    ? 'bg-slate-800/50 border-slate-700/50 text-slate-500 cursor-not-allowed'
+                    : 'bg-rose-950/40 hover:bg-rose-900/60 border-rose-600/40 text-rose-300 cursor-pointer'
+                }`}
                 title="Reset Seluruh Bagan"
               >
                 <RotateCcw size={15} />
@@ -284,6 +299,7 @@ export const BracketToolbar: React.FC<BracketToolbarProps> = ({
                 <button
                   type="button"
                   onClick={onSaveBracket}
+                  disabled={isDrawLocked}
                   className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg shadow-md transition-colors ${isDrawLocked ? 'bg-emerald-800/50 text-slate-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer'}`}
                   title="Simpan Bagan ke Database"
                 >

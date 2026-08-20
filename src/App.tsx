@@ -80,7 +80,7 @@ export default function App() {
   };
   const [zoomLevel, setZoomLevel] = useState<number>(() => {
     if (typeof window !== 'undefined') {
-      return window.innerWidth < 640 ? 0.6 : 0.7;
+      return window.innerWidth < 640 ? 0.5 : 0.7;
     }
     return 0.7;
   });
@@ -93,11 +93,38 @@ export default function App() {
   const [tournamentPin, setTournamentPin] = useState<string>('123456');
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const [pinInput, setPinInput] = useState<string>('');
-
+  
+  // Lock State Logic
+  const lockTeam = teams.find((t) => t.id === 'LOCK_STATE');
+  const isGlobalLocked = lockTeam?.category === 'LOCKED';
+  
+  // Exclude BYE and LOCK_STATE for optimal size calculation and team lists
+  const actualTeams = teams.filter(t => t.id !== 'BYE' && t.id !== 'LOCK_STATE');
+  
   // Calculate Optimal Size for Draw Safety Lock
   const validSizes = [4, 8, 16, 32, 64, 128];
-  const optimalSize = validSizes.find(v => v >= teams.length) || 128;
-  const isDrawLocked = bracketSize !== optimalSize && teams.length > 0;
+  const optimalSize = validSizes.find(v => v >= actualTeams.length) || 128;
+  const isSizeMismatch = bracketSize !== optimalSize && actualTeams.length > 0;
+  
+  const isDrawLocked = isGlobalLocked || isSizeMismatch;
+
+  const handleToggleLock = async () => {
+    if (!isAdmin || !tournamentId) return;
+    const newCategory = isGlobalLocked ? 'UNLOCKED' : 'LOCKED';
+    
+    // Update locally
+    setTeams(prev => prev.map(t => 
+      t.id === 'LOCK_STATE' ? { ...t, category: newCategory as CategoryType } : t
+    ));
+    
+    // Save to db
+    await saveTeam(tournamentId, {
+      id: 'LOCK_STATE',
+      name: 'SYSTEM_LOCK',
+      category: newCategory as CategoryType,
+      club: ''
+    });
+  };
 
   // Modal States
   const [isLiveDrawOpen, setIsLiveDrawOpen] = useState(false);
@@ -422,7 +449,7 @@ export default function App() {
   };
 
   const handleAutoSizeBracket = () => {
-    const numTeams = teams.length;
+    const numTeams = actualTeams.length;
     if (numTeams === 0) {
       setConfirmConfig({
         isOpen: true,
@@ -584,11 +611,11 @@ export default function App() {
         if (m.t2 && m.t2.id !== 'BYE') occupied.add(m.t2.id);
       });
     }
-    return teams.filter(t => !occupied.has(t.id)).length;
+    return actualTeams.filter(t => !occupied.has(t.id)).length;
   };
 
   const handleAutoDistributeByes = () => {
-    const numByes = Math.max(0, bracketSize - teams.length);
+    const numByes = Math.max(0, bracketSize - actualTeams.length);
     if (numByes === 0) {
       setConfirmConfig({
         isOpen: true,
@@ -820,7 +847,7 @@ export default function App() {
 
   const handleExportCSV = () => {
     let csvContent = 'data:text/csv;charset=utf-8,No,Nama Tim,Kategori,Klub\n';
-    teams.forEach((t, i) => {
+    actualTeams.forEach((t, i) => {
       csvContent += `${i + 1},"${t.name}","${t.category}","${t.club || ''}"\n`;
     });
     const encodedUri = encodeURI(csvContent);
@@ -883,7 +910,7 @@ export default function App() {
         <Navigation
           activeTab={activeTab}
           onSelectTab={setActiveTab}
-          teamCount={teams.length}
+          teamCount={actualTeams.length}
           onPrint={() => window.print()}
           onOpenLiveDraw={() => setIsLiveDrawOpen(true)}
           onAutoDistributeByes={handleAutoDistributeByes}
@@ -894,7 +921,9 @@ export default function App() {
           isAdmin={isAdmin}
           onOpenLogin={() => setIsLoginModalOpen(true)}
           onLogout={handleLogoutAdmin}
-          isDrawLocked={isDrawLocked}
+          isDrawLocked={isGlobalLocked}
+          isAdminLockEnabled={isGlobalLocked}
+          onToggleAdminLock={handleToggleLock}
         />
       )}
       
@@ -902,7 +931,7 @@ export default function App() {
         <main className={`flex-1 flex flex-col min-h-0 overflow-x-hidden ${activeTab !== 'bagan' && !isPresentationMode ? 'overflow-y-auto' : 'overflow-hidden'} ${isPresentationMode ? 'p-0' : 'p-3 sm:p-6'}`}>
           {activeTab === 'peserta' && !isPresentationMode && (
             <ParticipantManager
-              teams={teams}
+              teams={actualTeams}
               isAdmin={isAdmin}
             onAddTeam={handleAddTeam}
             onUpdateTeam={handleUpdateTeam}
@@ -940,7 +969,7 @@ export default function App() {
                           onFitToScreen={() => calculateFitToScreen()}
                           onResetZoom={() => {
                             const isMobile = window.innerWidth < 640;
-                            setZoomLevel(isMobile ? 0.6 : 0.7);
+                            setZoomLevel(isMobile ? 0.5 : 0.7);
                           }}
                           totalRounds={rounds.length}
                           onRefresh={() => loadTournamentData(true)}
@@ -955,7 +984,7 @@ export default function App() {
                         activeTab={activeTab}
                         onChangeTab={(tab) => setActiveTab(tab)}
                         isAdmin={isAdmin}
-                        isDrawLocked={isDrawLocked}
+                        isDrawLocked={isGlobalLocked}
                       />
                 </div>
               </div>
@@ -974,7 +1003,7 @@ export default function App() {
                   onFitToScreen={() => calculateFitToScreen()}
                   onResetZoom={() => {
                     const isMobile = window.innerWidth < 640;
-                    setZoomLevel(isMobile ? 0.6 : 0.7);
+                    setZoomLevel(isMobile ? 0.5 : 0.7);
                   }}
                   totalRounds={rounds.length}
                   onRefresh={() => loadTournamentData(true)}
@@ -1000,11 +1029,11 @@ export default function App() {
                     </div>
                     <BracketCanvas
                       rounds={rounds}
-                      teams={teams}
+                      teams={actualTeams}
                       layoutMode={layoutMode}
                       zoomLevel={zoomLevel}
                       activeFilter={activeFilter}
-                      onSelectTeamSlot={isAdmin ? handleSelectTeamSlot : undefined}
+                      onSelectTeamSlot={isAdmin && !isGlobalLocked ? handleSelectTeamSlot : undefined}
                       onSelectWinner={isAdmin ? handleSelectWinner : undefined}
                       onRequestUndoWinner={isAdmin ? handleRequestUndoWinner : undefined}
                       onUpdateSchedule={isAdmin ? handleUpdateSchedule : undefined}

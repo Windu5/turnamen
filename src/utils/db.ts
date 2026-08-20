@@ -36,6 +36,24 @@ export const fetchTournamentData = async (tournamentId: string) => {
     }]);
   }
 
+  // Ensure LOCK_STATE exists to track global lock status
+  const { data: existingLock } = await supabase
+    .from('teams')
+    .select('id')
+    .eq('tournament_id', tournamentId)
+    .eq('id', 'LOCK_STATE')
+    .maybeSingle();
+
+  if (!existingLock) {
+    await supabase.from('teams').insert([{
+      id: 'LOCK_STATE',
+      tournament_id: tournamentId,
+      name: 'SYSTEM_LOCK',
+      category: 'UNLOCKED', // Default UNLOCKED
+      club: ''
+    }]);
+  }
+
   const [tRes, teamsRes, matchesRes] = await Promise.all([
     supabase.from('tournaments').select('*').eq('id', tournamentId).single(),
     supabase.from('teams').select('*').eq('tournament_id', tournamentId),
@@ -95,7 +113,8 @@ export const deleteAllTeams = async (tournamentId: string) => {
   const { error } = await supabase.from('teams')
     .delete()
     .eq('tournament_id', tournamentId)
-    .neq('id', 'BYE');
+    .neq('id', 'BYE')
+    .neq('id', 'LOCK_STATE');
   if (error) {
     console.error('Error clearing teams:', error);
     alert('Gagal menghapus semua peserta: ' + error.message);
