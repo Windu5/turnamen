@@ -306,7 +306,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({
 
       {/* Match Slots */}
       <div className="relative">
-        {match.winner && (
+        {isToday && match.winner && (
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-12 text-emerald-500/85 border-[3px] border-emerald-500/85 text-xl font-black px-3 py-1 rounded-lg uppercase tracking-[0.2em] pointer-events-none z-30 backdrop-blur-[1px] shadow-[0_0_15px_rgba(16,185,129,0.3),inset_0_0_10px_rgba(16,185,129,0.2)]" style={{ textShadow: '0 0 8px rgba(16, 185, 129, 0.6)' }}>
               SELESAI
             </div>
