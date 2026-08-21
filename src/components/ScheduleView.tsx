@@ -269,7 +269,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                       <td className={`py-3 px-4 text-xs transition-colors ${match.winner ? 'bg-emerald-500/10 border-l-[5px] border-l-emerald-500' : 'text-slate-400'}`}>
                         {match.winner ? (
                           <div className="flex flex-col gap-0.5">
-                            <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">✔️ SELESAI</span>
+                            <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">SELESAI</span>
                             <span className="font-bold text-[13px] text-slate-200">{formatDate(match.schedule.date)}</span>
                           </div>
                         ) : (
