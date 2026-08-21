@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variasi Pita Mengambang (Badge)</title>
+    <style>
+        body { background-color: #0f172a; color: #f1f5f9; font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 40px; gap: 40px; }
+        .card-container { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; max-width: 1200px; }
+        .card { width: 260px; height: 120px; background: linear-gradient(to bottom right, rgba(15,23,42,0.95), rgba(30,41,59,0.9)); border: 1px solid rgba(51,65,85,0.6); border-radius: 16px; position: relative; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 12px; }
+        
+        /* Model 1: Neon Pulse (Tengah) */
+        .badge-1 { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #ef4444; color: white; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 999px; box-shadow: 0 0 10px rgba(239,68,68,0.6); border: 2px solid #0f172a; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -5px); } }
+
+        /* Model 2: Minimalist Dot (Elegan) */
+        .badge-2 { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #f87171; font-size: 10px; font-weight: bold; padding: 4px 12px; border-radius: 999px; border: 1px solid rgba(248,113,113,0.3); display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .badge-2::before { content: ''; display: block; width: 6px; height: 6px; background: #ef4444; border-radius: 50%; box-shadow: 0 0 8px #ef4444; animation: blink 1.5s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* Model 3: Corner Ribbon (Pita Sudut) */
+        .card-3 { overflow: hidden; } /* Harus overflow hidden untuk pita sudut */
+        .badge-3 { position: absolute; top: 12px; right: -28px; background: #f59e0b; color: #451a03; font-size: 9px; font-weight: 900; padding: 4px 30px; transform: rotate(45deg); box-shadow: 0 2px 4px rgba(0,0,0,0.5); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Model 4: Gradient Glow (Premium) */
+        .badge-4 { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, #f59e0b, #ef4444); color: white; font-size: 10px; font-weight: bold; padding: 4px 14px; border-radius: 6px; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4); text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid rgba(255,255,255,0.2); }
+
+        /* Model 5: Radar Ripple (Ping) */
+        .badge-5 { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #3b82f6; color: white; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 999px; border: 2px solid #0f172a; }
+        .badge-5::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 999px; border: 2px solid #3b82f6; animation: ripple 1.5s infinite ease-out; pointer-events: none; }
+        @keyframes ripple { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+
+    </style>
+</head>
+<body>
+    <h2>Preview Variasi Model "Pita Mengambang"</h2>
+    <p style="color: #94a3b8; max-width: 600px; text-align: center;">Berikut adalah 5 ide desain baru untuk pita "HARI INI". Silakan lihat mana gaya yang paling cocok dengan nuansa web Anda.</p>
+    
+    <div class="card-container">
+        <!-- Model 1 -->
+        <div>
+            <h3 style="text-align: center; color: #cbd5e1; font-size: 14px;">1. Neon Pulse (Saat Ini)</h3>
+            <div class="card">
+                <div class="badge-1">🔥 HARI INI</div>
+                Contoh Isi Kotak
+            </div>
+        </div>
+
+        <!-- Model 2 -->
+        <div>
+            <h3 style="text-align: center; color: #cbd5e1; font-size: 14px;">2. Minimalist Dot (Elegan)</h3>
+            <div class="card">
+                <div class="badge-2">HARI INI</div>
+                Contoh Isi Kotak
+            </div>
+        </div>
+
+        <!-- Model 3 -->
+        <div>
+            <h3 style="text-align: center; color: #cbd5e1; font-size: 14px;">3. Corner Ribbon (Sudut)</h3>
+            <div class="card card-3">
+                <div class="badge-3">Hari Ini</div>
+                Contoh Isi Kotak
+            </div>
+        </div>
+
+        <!-- Model 4 -->
+        <div>
+            <h3 style="text-align: center; color: #cbd5e1; font-size: 14px;">4. Gradient Glow (Premium)</h3>
+            <div class="card">
+                <div class="badge-4">🎯 Hari Ini</div>
+                Contoh Isi Kotak
+            </div>
+        </div>
+
+        <!-- Model 5 -->
+        <div>
+            <h3 style="text-align: center; color: #cbd5e1; font-size: 14px;">5. Blue Radar Ripple (Futuristik)</h3>
+            <div class="card">
+                <div class="badge-5">⚡ HARI INI</div>
+                Contoh Isi Kotak
+            </div>
+        </div>
+    </div>
+</body>
+</html>

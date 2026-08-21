@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Efek Gabungan</title>
+    <style>
+        body { background-color: #0f172a; color: #f1f5f9; font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 40px; gap: 40px; }
+        .card-container { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; max-width: 1200px; }
+        
+        .card { width: 260px; background: linear-gradient(to bottom right, rgba(15,23,42,0.95), rgba(6,78,59,0.4)); border: 1px solid rgba(16,185,129,0.5); border-radius: 16px; position: relative; box-shadow: 0 4px 15px rgba(16,185,129,0.2); display: flex; flex-direction: column; overflow: visible; }
+        
+        .card-header { padding: 8px 10px; background: rgba(2,6,23,0.4); border-bottom: 1px solid rgba(51,65,85,0.5); font-size: 11px; color: #94a3b8; display: flex; justify-content: space-between; border-top-left-radius: 16px; border-top-right-radius: 16px; }
+        
+        .card-slot { padding: 12px; border-bottom: 1px solid rgba(51,65,85,0.4); display: flex; align-items: center; gap: 8px; position: relative; }
+        .card-slot:last-child { border-bottom: none; }
+        
+        /* Winner & Loser Slot */
+        .slot-winner { background: linear-gradient(to right, rgba(16,185,129,0.2), rgba(6,78,59,0.4)); color: #6ee7b7; font-weight: bold; }
+        .slot-winner::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #34d399; box-shadow: 0 0 8px rgba(52,211,153,0.8); border-bottom-left-radius: 16px; }
+        .slot-loser { opacity: 0.4; filter: grayscale(100%); color: #cbd5e1; }
+        
+        /* Container untuk Gabungan Pita */
+        .badge-container { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 30; white-space: nowrap; }
+        
+        /* Individual Badges */
+        .badge-hari-ini { background: #ef4444; color: white; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 999px; box-shadow: 0 0 10px rgba(239,68,68,0.6); border: 2px solid #0f172a; }
+        .badge-selesai { background: #10b981; color: #022c22; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 999px; box-shadow: 0 0 10px rgba(16,185,129,0.6); border: 2px solid #0f172a; }
+        
+        /* Opsi 2: Nempel Menjadi Satu Kesatuan */
+        .badge-combined { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); display: flex; z-index: 30; border-radius: 999px; overflow: hidden; border: 2px solid #0f172a; box-shadow: 0 0 10px rgba(16,185,129,0.4); }
+        .badge-combined-left { background: #ef4444; color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; }
+        .badge-combined-right { background: #10b981; color: #022c22; font-size: 10px; font-weight: 900; padding: 4px 10px; border-left: 1px solid rgba(255,255,255,0.2); }
+
+    </style>
+</head>
+<body>
+    <h2>Preview Gabungan "HARI INI" dan "SELESAI"</h2>
+    <p style="color: #94a3b8; max-width: 600px; text-align: center;">Jika pertandingan tersebut berlangsung hari ini dan juga sudah selesai. Berikut 2 alternatif gaya penempatannya bersandingan.</p>
+    
+    <div class="card-container">
+        
+        <!-- Opsi 1: Bersebelahan Terpisah -->
+        <div>
+            <h3 style="text-align: center; color: #cbd5e1; font-size: 14px;">1. Bersebelahan (Dua Kapsul)</h3>
+            <div class="card">
+                <div class="badge-container">
+                    <div class="badge-hari-ini">🔥 HARI INI</div>
+                    <div class="badge-selesai">✔️ SELESAI</div>
+                </div>
+                
+                <div class="card-header">
+                    <span>20-08-2026</span>
+                    <span>Lap 1</span>
+                </div>
+                
+                <div class="card-slot slot-winner">
+                    <div style="width:20px; height:20px; background:#1e293b; border-radius:4px; text-align:center; font-size:10px; line-height:20px; color:#94a3b8;">1</div>
+                    <div style="font-size: 12px;">PB Tangkas</div>
+                    <div style="margin-left: auto;">✔️</div>
+                </div>
+                
+                <div class="card-slot slot-loser">
+                    <div style="width:20px; height:20px; background:#1e293b; border-radius:4px; text-align:center; font-size:10px; line-height:20px; color:#94a3b8;">2</div>
+                    <div style="font-size: 12px; font-weight: bold;">PB Djarum</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Opsi 2: Menyatu (Satu Kapsul Dua Warna) -->
+        <div>
+            <h3 style="text-align: center; color: #cbd5e1; font-size: 14px;">2. Menyatu (Satu Kapsul Belah Dua)</h3>
+            <div class="card">
+                <div class="badge-combined">
+                    <div class="badge-combined-left">🔥 HARI INI</div>
+                    <div class="badge-combined-right">✔️ SELESAI</div>
+                </div>
+                
+                <div class="card-header">
+                    <span>20-08-2026</span>
+                    <span>Lap 2</span>
+                </div>
+                
+                <div class="card-slot slot-winner">
+                    <div style="width:20px; height:20px; background:#1e293b; border-radius:4px; text-align:center; font-size:10px; line-height:20px; color:#94a3b8;">3</div>
+                    <div style="font-size: 12px;">PB Mutiara</div>
+                    <div style="margin-left: auto;">✔️</div>
+                </div>
+                
+                <div class="card-slot slot-loser">
+                    <div style="width:20px; height:20px; background:#1e293b; border-radius:4px; text-align:center; font-size:10px; line-height:20px; color:#94a3b8;">4</div>
+                    <div style="font-size: 12px; font-weight: bold;">PB Jaya Raya</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
