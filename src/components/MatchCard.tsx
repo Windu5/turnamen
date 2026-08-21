@@ -99,6 +99,8 @@ export const MatchCard: React.FC<MatchCardProps> = ({
       match.winner && team && match.winner.id === team.id;
     const isBye = team && team.id === 'BYE';
     const isLoser = match.winner && !isWinner && !isBye && team;
+    const isWO = match.score1?.toUpperCase() === 'WO' || match.score2?.toUpperCase() === 'WO';
+    const isLoserWO = isWO && isLoser;
     const opponent = teamProp === 't1' ? match.t2 : match.t1;
     const isFacingBye = isFirstRound && opponent?.id === 'BYE' && !isBye && team;
     const isHighlighted = highlightedTeamId !== undefined && highlightedTeamId !== null && team?.id === highlightedTeamId;
@@ -112,6 +114,8 @@ export const MatchCard: React.FC<MatchCardProps> = ({
             ? 'highlighted-slot bg-blue-900/40 text-blue-100 font-bold'
             : isWinner
             ? 'bg-gradient-to-r from-emerald-500/20 to-emerald-900/40 text-emerald-300 font-bold'
+            : isLoserWO
+            ? 'border-b border-rose-900/30 opacity-60 grayscale'
             : isBye
             ? 'text-slate-500/60 italic'
             : isLoser
@@ -171,7 +175,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({
               ))}
             </select>
           ) : (
-            <div className={`truncate font-medium ${isBye ? 'text-rose-400 font-bold' : 'text-slate-100'}`} title={team ? team.name : '---'}>
+            <div className={`truncate font-medium ${isBye ? 'text-rose-400 font-bold' : isLoserWO ? 'text-rose-500 line-through' : 'text-slate-100'}`} title={team ? team.name : '---'}>
               {team ? (
                 <span className="flex items-center gap-1.5">
                   {isBye ? '[ KOSONG / BYE ]' : team.name}
@@ -227,6 +231,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({
   };
 
   const hasBye = (match.t1?.id === 'BYE' || match.t2?.id === 'BYE') && !isFinal;
+  const isMatchWO = match.score1?.toUpperCase() === 'WO' || match.score2?.toUpperCase() === 'WO';
   
   const getTodayDate = () => {
     const d = new Date();
@@ -306,11 +311,15 @@ export const MatchCard: React.FC<MatchCardProps> = ({
 
       {/* Match Slots */}
       <div className="relative">
-        {isToday && match.winner && (
+        {isMatchWO && match.winner ? (
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-12 text-rose-500 border-[3px] border-rose-500 text-2xl font-black px-4 py-1 rounded-lg uppercase tracking-[0.2em] pointer-events-none z-30 backdrop-blur-[1px] shadow-[0_0_15px_rgba(239,68,68,0.3),inset_0_0_10px_rgba(239,68,68,0.2)]" style={{ textShadow: '0 0 8px rgba(239, 68, 68, 0.6)' }}>
+              W.O.
+            </div>
+        ) : (isToday && match.winner && (
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-12 text-emerald-500/85 border-[3px] border-emerald-500/85 text-xl font-black px-3 py-1 rounded-lg uppercase tracking-[0.2em] pointer-events-none z-30 backdrop-blur-[1px] shadow-[0_0_15px_rgba(16,185,129,0.3),inset_0_0_10px_rgba(16,185,129,0.2)]" style={{ textShadow: '0 0 8px rgba(16, 185, 129, 0.6)' }}>
               SELESAI
             </div>
-        )}
+        ))}
         {renderSlot('t1', slotNumber1)}
         {renderSlot('t2', slotNumber2)}
       </div>

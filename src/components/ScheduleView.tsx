@@ -258,6 +258,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                   const { rIdx, mIdx, roundName, match } = item;
                   const isWinner1 = match.winner && match.t1 && match.winner.id === match.t1.id;
                   const isWinner2 = match.winner && match.t2 && match.winner.id === match.t2.id;
+                  const isWO = match.score1?.toUpperCase() === 'WO' || match.score2?.toUpperCase() === 'WO';
                   const matchId = match.id || `${rIdx}-${mIdx}`;
                   const isEditingScore = editingScoreId === matchId;
 
@@ -266,10 +267,10 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                       key={matchId}
                       className="hover:bg-slate-700/40 transition-colors"
                     >
-                      <td className={`py-3 px-4 text-xs transition-colors ${match.winner ? 'bg-emerald-500/10 border-l-[5px] border-l-emerald-500' : 'text-slate-400'}`}>
+                      <td className={`py-3 px-4 text-xs transition-colors ${match.winner ? (isWO ? 'bg-rose-500/10 border-l-[5px] border-l-rose-500' : 'bg-emerald-500/10 border-l-[5px] border-l-emerald-500') : 'text-slate-400'}`}>
                         {match.winner ? (
                           <div className="flex flex-col gap-0.5">
-                            <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">SELESAI</span>
+                            <span className={`text-[10px] font-bold uppercase tracking-wider ${isWO ? 'text-rose-500' : 'text-emerald-500'}`}>{isWO ? 'WALKOVER' : 'SELESAI'}</span>
                             <span className="font-bold text-[13px] text-slate-200">{formatDate(match.schedule.date)}</span>
                           </div>
                         ) : (
@@ -279,13 +280,13 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                       <td className="py-3 px-4 text-center font-bold text-amber-400">
                         {match.schedule.matchNum ? `#${match.schedule.matchNum}` : '-'}
                       </td>
-                      <td className={`py-3 px-4 font-bold ${isWinner1 ? 'text-emerald-400' : 'text-slate-100'}`}>
+                      <td className={`py-3 px-4 font-bold ${isWinner1 ? 'text-emerald-400' : (isWO && !isWinner1 && match.winner) ? 'text-slate-500 line-through opacity-60' : 'text-slate-100'}`}>
                         {match.t1 ? match.t1.name : '---'}
                       </td>
                       <td className="py-3 px-4 text-center text-slate-500 font-bold text-xs">
-                        VS
+                        {isWO ? <span className="text-rose-500">[WO]</span> : 'VS'}
                       </td>
-                      <td className={`py-3 px-4 font-bold ${isWinner2 ? 'text-emerald-400' : 'text-slate-100'}`}>
+                      <td className={`py-3 px-4 font-bold ${isWinner2 ? 'text-emerald-400' : (isWO && !isWinner2 && match.winner) ? 'text-slate-500 line-through opacity-60' : 'text-slate-100'}`}>
                         {match.t2 ? match.t2.name : '---'}
                       </td>
                       <td className="py-3 px-4 text-slate-300">
