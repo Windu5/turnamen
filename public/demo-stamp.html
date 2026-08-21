@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Ukuran Stempel</title>
+    <style>
+        body { background-color: #0f172a; color: #f1f5f9; font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 40px; gap: 40px; }
+        
+        .card { width: 260px; background: linear-gradient(to bottom right, rgba(15,23,42,0.95), rgba(30,41,59,0.9)); border: 1px solid rgba(51,65,85,0.6); border-radius: 16px; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: flex; flex-direction: column; overflow: hidden; margin-bottom: 20px;}
+        
+        .slots-container { position: relative; display: flex; flex-direction: column; }
+        .card-slot { padding: 12px; border-bottom: 1px solid rgba(51,65,85,0.4); display: flex; align-items: center; gap: 8px; position: relative; height: 26px; }
+        
+        .slot-winner { background: linear-gradient(to right, rgba(16,185,129,0.2), rgba(6,78,59,0.4)); color: #6ee7b7; font-weight: bold; }
+        .slot-winner::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #34d399; box-shadow: 0 0 8px rgba(52,211,153,0.8); }
+        .slot-loser-wo { opacity: 0.5; filter: grayscale(100%); color: #ef4444; text-decoration: line-through; }
+        
+        /* Stempel Lama (Besar) */
+        .stempel-wo-lama { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); 
+            color: rgba(239, 68, 68, 1); border: 3px solid rgba(239, 68, 68, 1);
+            font-size: 24px; font-weight: 900; padding: 4px 16px; border-radius: 8px;
+            text-transform: uppercase; letter-spacing: 4px; pointer-events: none; z-index: 20;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3), inset 0 0 10px rgba(239, 68, 68, 0.2);
+            text-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+        }
+        .stempel-selesai-lama { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); 
+            color: rgba(16, 185, 129, 0.85); border: 3px solid rgba(16, 185, 129, 0.85);
+            font-size: 20px; font-weight: 900; padding: 4px 12px; border-radius: 8px;
+            text-transform: uppercase; letter-spacing: 4px; pointer-events: none; z-index: 20;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3), inset 0 0 10px rgba(16, 185, 129, 0.2);
+            text-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+        }
+
+        /* Stempel Baru (Kecil) */
+        .stempel-wo-baru { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); 
+            color: rgba(239, 68, 68, 1); border: 2px solid rgba(239, 68, 68, 1);
+            font-size: 16px; font-weight: 900; padding: 2px 10px; border-radius: 6px;
+            text-transform: uppercase; letter-spacing: 2px; pointer-events: none; z-index: 20;
+            background: rgba(15, 23, 42, 0.5); /* Sedikit background agar teks lebih terbaca */
+            backdrop-filter: blur(2px);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.2), inset 0 0 5px rgba(239, 68, 68, 0.1);
+            text-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+        }
+        .stempel-selesai-baru { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); 
+            color: rgba(16, 185, 129, 0.9); border: 2px solid rgba(16, 185, 129, 0.9);
+            font-size: 14px; font-weight: 900; padding: 2px 8px; border-radius: 6px;
+            text-transform: uppercase; letter-spacing: 2px; pointer-events: none; z-index: 20;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(2px);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2), inset 0 0 5px rgba(16, 185, 129, 0.1);
+            text-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
+        }
+
+    </style>
+</head>
+<body>
+    <h2>Preview Ukuran Stempel (Kecil vs Besar)</h2>
+    
+    <div style="display: flex; gap: 40px; flex-wrap: wrap; justify-content: center;">
+        
+        <!-- Ukuran Lama -->
+        <div>
+            <h3 style="text-align: center; color: #94a3b8; font-size: 14px;">Ukuran Lama (Besar)</h3>
+            
+            <div class="card">
+                <div class="slots-container">
+                    <div class="stempel-wo-lama">W.O.</div>
+                    <div class="card-slot slot-winner">
+                        <div style="font-size: 12px; z-index: 10;">PB Tangkas</div>
+                        <div style="margin-left: auto; z-index: 10;">✔️</div>
+                    </div>
+                    <div class="card-slot slot-loser-wo">
+                        <div style="font-size: 12px; font-weight: bold; z-index: 10;">PB Djarum</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="slots-container">
+                    <div class="stempel-selesai-lama">SELESAI</div>
+                    <div class="card-slot slot-winner">
+                        <div style="font-size: 12px; z-index: 10;">PB Jaya Raya</div>
+                        <div style="margin-left: auto; z-index: 10;">✔️</div>
+                    </div>
+                    <div class="card-slot">
+                        <div style="font-size: 12px; font-weight: bold; z-index: 10; opacity: 0.5;">PB Exist</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ukuran Baru -->
+        <div>
+            <h3 style="text-align: center; color: #38bdf8; font-size: 14px;">Ukuran Baru (Dikecilkan)</h3>
+            
+            <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
+                <div class="slots-container">
+                    <div class="stempel-wo-baru">W.O.</div>
+                    <div class="card-slot slot-winner">
+                        <div style="font-size: 12px; z-index: 10;">PB Tangkas</div>
+                        <div style="margin-left: auto; z-index: 10;">✔️</div>
+                    </div>
+                    <div class="card-slot slot-loser-wo">
+                        <div style="font-size: 12px; font-weight: bold; z-index: 10;">PB Djarum</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
+                <div class="slots-container">
+                    <div class="stempel-selesai-baru">SELESAI</div>
+                    <div class="card-slot slot-winner">
+                        <div style="font-size: 12px; z-index: 10;">PB Jaya Raya</div>
+                        <div style="margin-left: auto; z-index: 10;">✔️</div>
+                    </div>
+                    <div class="card-slot">
+                        <div style="font-size: 12px; font-weight: bold; z-index: 10; opacity: 0.5;">PB Exist</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -312,11 +312,11 @@ export const MatchCard: React.FC<MatchCardProps> = ({
       {/* Match Slots */}
       <div className="relative">
         {isMatchWO && match.winner ? (
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-12 text-rose-500 border-[3px] border-rose-500 text-2xl font-black px-4 py-1 rounded-lg uppercase tracking-[0.2em] pointer-events-none z-30 backdrop-blur-[1px] shadow-[0_0_15px_rgba(239,68,68,0.3),inset_0_0_10px_rgba(239,68,68,0.2)]" style={{ textShadow: '0 0 8px rgba(239, 68, 68, 0.6)' }}>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-12 text-rose-500 border-2 border-rose-500 text-base font-black px-2.5 py-0.5 rounded-md uppercase tracking-[0.15em] pointer-events-none z-30 bg-slate-900/50 backdrop-blur-[2px] shadow-[0_0_10px_rgba(239,68,68,0.2),inset_0_0_5px_rgba(239,68,68,0.1)]" style={{ textShadow: '0 0 5px rgba(239, 68, 68, 0.5)' }}>
               W.O.
             </div>
-        ) : (isToday && match.winner && (
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-12 text-emerald-500/85 border-[3px] border-emerald-500/85 text-xl font-black px-3 py-1 rounded-lg uppercase tracking-[0.2em] pointer-events-none z-30 backdrop-blur-[1px] shadow-[0_0_15px_rgba(16,185,129,0.3),inset_0_0_10px_rgba(16,185,129,0.2)]" style={{ textShadow: '0 0 8px rgba(16, 185, 129, 0.6)' }}>
+        ) : (match.winner && (
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-12 text-emerald-500/90 border-2 border-emerald-500/90 text-sm font-black px-2 py-0.5 rounded-md uppercase tracking-[0.15em] pointer-events-none z-30 bg-slate-900/40 backdrop-blur-[2px] shadow-[0_0_10px_rgba(16,185,129,0.2),inset_0_0_5px_rgba(16,185,129,0.1)]" style={{ textShadow: '0 0 5px rgba(16, 185, 129, 0.5)' }}>
               SELESAI
             </div>
         ))}
