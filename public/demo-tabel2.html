@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Tabel Jadwal - Fokus Tanggal</title>
+    <style>
+        body { background-color: #0f172a; color: #f1f5f9; font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 40px; }
+        
+        table { width: 100%; max-width: 900px; border-collapse: collapse; background: rgba(30, 41, 59, 0.5); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        th { background: rgba(15, 23, 42, 0.8); color: #94a3b8; font-size: 12px; font-weight: 600; text-transform: uppercase; padding: 12px 16px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); text-align: center; }
+        td { padding: 16px; border-bottom: 1px solid rgba(51, 65, 85, 0.3); font-size: 14px; text-align: center; }
+        tr:hover { background: rgba(51, 65, 85, 0.4); }
+
+        .winner-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; font-size: 12px; font-weight: bold; border-radius: 6px; }
+        
+        .team { font-weight: 500; color: #e2e8f0; width: 120px; display: inline-block; }
+        .team-right { text-align: right; }
+        .team-left { text-align: left; }
+        .loser { color: #64748b; }
+
+        /* A: Pita Sudut Kiri (Ribbon Kiri) */
+        .badge-ribbon-left { position: absolute; top: 12px; left: -25px; background: #10b981; color: #022c22; font-size: 8px; font-weight: 900; padding: 2px 25px; transform: rotate(-45deg); text-transform: uppercase; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+
+        /* B: Lencana Tepat Di Atas Tanggal */
+        .badge-above { background: #10b981; color: #022c22; font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; margin-bottom: 4px; display: inline-block; }
+
+        /* C: Pita Sudut Kanan (Ribbon Kanan di Kolom Tanggal) */
+        .badge-ribbon-right { position: absolute; top: 12px; right: -25px; background: #10b981; color: #022c22; font-size: 8px; font-weight: 900; padding: 2px 25px; transform: rotate(45deg); text-transform: uppercase; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+
+    </style>
+</head>
+<body>
+    <h2>Preview Penempatan "SELESAI" di Kolom Tanggal</h2>
+    <p style="color: #94a3b8; max-width: 600px; text-align: center; margin-bottom: 30px;">
+        Sesuai preferensi Anda yang menyukai bentuk Ribbon (Pita) dan diletakkan di area Tanggal, berikut simulasinya:
+    </p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 150px;">Tanggal</th>
+                <th>Lap</th>
+                <th>Pertandingan</th>
+                <th>Pemenang</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <!-- A: Ribbon Kiri -->
+            <tr>
+                <td style="position: relative; overflow: hidden;">
+                    <div class="badge-ribbon-left">Selesai</div>
+                    <div style="margin-top: 6px;">20-08-2026</div>
+                </td>
+                <td>Lap 1</td>
+                <td>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                        <span class="team team-right loser">PB Tangkas</span>
+                        <span style="color: #64748b; font-size: 12px;">vs</span>
+                        <span class="team team-left" style="color: #34d399;">PB Djarum</span>
+                    </div>
+                </td>
+                <td><div class="winner-badge">✔️ PB Djarum</div></td>
+            </tr>
+
+            <!-- B: Badge Di Atas Tanggal -->
+            <tr>
+                <td>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span class="badge-above">Selesai</span>
+                        <span>21-08-2026</span>
+                    </div>
+                </td>
+                <td>Lap 2</td>
+                <td>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                        <span class="team team-right" style="color: #34d399;">PB Jaya Raya</span>
+                        <span style="color: #64748b; font-size: 12px;">vs</span>
+                        <span class="team team-left loser">PB SGS PLN</span>
+                    </div>
+                </td>
+                <td><div class="winner-badge">✔️ PB Jaya Raya</div></td>
+            </tr>
+
+            <!-- C: Ribbon Kanan pada Kolom Tanggal -->
+            <tr>
+                <td style="position: relative; overflow: hidden;">
+                    <div class="badge-ribbon-right">Selesai</div>
+                    <div style="margin-top: 6px;">22-08-2026</div>
+                </td>
+                <td>Lap 3</td>
+                <td>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                        <span class="team team-right loser">PB Exist</span>
+                        <span style="color: #64748b; font-size: 12px;">vs</span>
+                        <span class="team team-left" style="color: #34d399;">PB Pelita</span>
+                    </div>
+                </td>
+                <td><div class="winner-badge">✔️ PB Pelita</div></td>
+            </tr>
+
+        </tbody>
+    </table>
+</body>
+</html>
