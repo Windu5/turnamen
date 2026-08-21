@@ -266,15 +266,15 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                       key={matchId}
                       className="hover:bg-slate-700/40 transition-colors"
                     >
-                      <td className="py-3 px-4 text-slate-400 text-xs relative overflow-hidden">
-                        {match.winner && (
-                          <div className="absolute top-2 -left-6 bg-emerald-500 text-emerald-950 text-[8px] font-black py-0.5 px-7 -rotate-45 uppercase tracking-wide shadow-md z-10">
-                            Selesai
+                      <td className={`py-3 px-4 text-xs transition-colors ${match.winner ? 'bg-emerald-500/10 border-l-[5px] border-l-emerald-500' : 'text-slate-400'}`}>
+                        {match.winner ? (
+                          <div className="flex flex-col gap-0.5">
+                            <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">✔️ SELESAI</span>
+                            <span className="font-bold text-[13px] text-slate-200">{formatDate(match.schedule.date)}</span>
                           </div>
+                        ) : (
+                          <span>{formatDate(match.schedule.date)}</span>
                         )}
-                        <div className={match.winner ? 'mt-3' : ''}>
-                          {formatDate(match.schedule.date)}
-                        </div>
                       </td>
                       <td className="py-3 px-4 text-center font-bold text-amber-400">
                         {match.schedule.matchNum ? `#${match.schedule.matchNum}` : '-'}

@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Tabel Jadwal - Block Style</title>
+    <style>
+        body { background-color: #0f172a; color: #f1f5f9; font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 40px; }
+        
+        table { width: 100%; max-width: 900px; border-collapse: separate; border-spacing: 0 8px; /* Memberi jarak antar baris */ }
+        th { background: transparent; color: #94a3b8; font-size: 12px; font-weight: 600; text-transform: uppercase; padding: 12px 16px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); text-align: center; }
+        
+        /* Baris Tabel Bergaya Card */
+        .row-card td { 
+            background: rgba(30, 41, 59, 0.7); 
+            padding: 12px 16px; 
+            font-size: 14px; 
+            text-align: center; 
+            border-top: 1px solid rgba(51, 65, 85, 0.4);
+            border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+            transition: all 0.3s;
+        }
+        .row-card:hover td { background: rgba(51, 65, 85, 0.6); }
+
+        /* Ujung kiri membulat */
+        .row-card td:first-child { 
+            border-top-left-radius: 12px; 
+            border-bottom-left-radius: 12px; 
+            border-left: 1px solid rgba(51, 65, 85, 0.4);
+        }
+        /* Ujung kanan membulat */
+        .row-card td:last-child { 
+            border-top-right-radius: 12px; 
+            border-bottom-right-radius: 12px; 
+            border-right: 1px solid rgba(51, 65, 85, 0.4);
+        }
+
+        .winner-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; font-size: 12px; font-weight: bold; border-radius: 6px; }
+        .team { font-weight: 500; color: #e2e8f0; width: 120px; display: inline-block; }
+        .team-right { text-align: right; }
+        .team-left { text-align: left; }
+        .loser { color: #64748b; }
+
+        /* 
+           Gaya "Menjorok Kedalam" (Solid Block) 
+           Sesuai inspirasi gambar: Blok warna solid di kiri (Tanggal) 
+        */
+        
+        /* Opsi A: Blok Solid Penuh */
+        .date-block-solid {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            color: #022c22 !important;
+            border-color: #059669 !important;
+            box-shadow: inset -3px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Opsi B: Blok dengan Garis Tebal (Inset) */
+        .date-block-inset {
+            background: rgba(16, 185, 129, 0.1) !important;
+            border-left: 6px solid #10b981 !important;
+            color: #34d399 !important;
+        }
+
+        /* Opsi C: Kotak Kalender di dalam Cell */
+        .date-box-inner {
+            background: #10b981;
+            color: #022c22;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-weight: 900;
+            box-shadow: 0 4px 10px rgba(16,185,129,0.3);
+        }
+
+    </style>
+</head>
+<body>
+    <h2>Preview Gaya Tanggal "Blok Kalender" (Menjorok)</h2>
+    <p style="color: #94a3b8; max-width: 600px; text-align: center; margin-bottom: 30px;">
+        Terinspirasi dari gambar yang Anda kirim, kita bisa menyulap sel "Tanggal" menjadi sebuah blok padat (seperti kalender) jika pertandingannya sudah selesai. Berikut 3 alternatifnya:
+    </p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 130px;">Tanggal</th>
+                <th>Lap</th>
+                <th>Pertandingan</th>
+                <th>Pemenang</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <!-- Normal (Belum Selesai) -->
+            <tr class="row-card">
+                <td style="color: #94a3b8;">
+                    <div style="font-size: 11px; text-transform: uppercase; margin-bottom: 2px;">Hari Ini</div>
+                    <div style="font-weight: bold; font-size: 15px;">20-08-2026</div>
+                </td>
+                <td>Lap 1</td>
+                <td>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                        <span class="team team-right">PB Tangkas</span>
+                        <span style="color: #64748b; font-size: 12px;">vs</span>
+                        <span class="team team-left">PB Djarum</span>
+                    </div>
+                </td>
+                <td style="color: #64748b; font-size: 12px;">Belum Selesai</td>
+            </tr>
+
+            <!-- Opsi A: Solid Block (Persis seperti gambar, memblok seluruh sel) -->
+            <tr class="row-card">
+                <td class="date-block-solid">
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <div style="font-size: 10px; font-weight: 900; letter-spacing: 1px; margin-bottom: -2px;">✔️ SELESAI</div>
+                        <div style="font-weight: 900; font-size: 16px;">21-08-2026</div>
+                    </div>
+                </td>
+                <td>Lap 2</td>
+                <td>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                        <span class="team team-right loser">PB SGS PLN</span>
+                        <span style="color: #64748b; font-size: 12px;">vs</span>
+                        <span class="team team-left" style="color: #34d399;">PB Mutiara</span>
+                    </div>
+                </td>
+                <td><div class="winner-badge">✔️ PB Mutiara</div></td>
+            </tr>
+
+            <!-- Opsi B: Inset Border (Aksen samping) -->
+            <tr class="row-card">
+                <td class="date-block-inset">
+                    <div style="font-size: 11px; font-weight: 800; color: #10b981;">✔️ SELESAI</div>
+                    <div style="font-weight: bold; font-size: 15px; color: #e2e8f0;">22-08-2026</div>
+                </td>
+                <td>Lap 1</td>
+                <td>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                        <span class="team team-right" style="color: #34d399;">PB Jaya Raya</span>
+                        <span style="color: #64748b; font-size: 12px;">vs</span>
+                        <span class="team team-left loser">PB Surya Naga</span>
+                    </div>
+                </td>
+                <td><div class="winner-badge">✔️ PB Jaya Raya</div></td>
+            </tr>
+
+            <!-- Opsi C: Kotak di Dalam (Inner Box) -->
+            <tr class="row-card">
+                <td>
+                    <div class="date-box-inner">
+                        <span style="font-size: 9px; opacity: 0.9;">✔️ SELESAI</span>
+                        <span style="font-size: 14px;">23-08</span>
+                    </div>
+                </td>
+                <td>Lap 3</td>
+                <td>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                        <span class="team team-right loser">PB Exist</span>
+                        <span style="color: #64748b; font-size: 12px;">vs</span>
+                        <span class="team team-left" style="color: #34d399;">PB Pelita</span>
+                    </div>
+                </td>
+                <td><div class="winner-badge">✔️ PB Pelita</div></td>
+            </tr>
+
+        </tbody>
+    </table>
+</body>
+</html>
