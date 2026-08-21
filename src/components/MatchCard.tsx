@@ -239,9 +239,9 @@ export const MatchCard: React.FC<MatchCardProps> = ({
 
   return (
     <div className="match-card relative w-[260px] group">
-      {/* Opsi 1: Pita Mengambang HARI INI */}
+      {/* Opsi 1: Pita Mengambang HARI INI di Tengah */}
       {isToday && !match.winner && (
-        <div className="absolute -top-2.5 -right-2.5 bg-rose-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(244,63,94,0.6)] z-20 border-2 border-slate-900 animate-[bounce_2s_infinite]">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-rose-500 text-white text-[10px] font-black px-3 py-0.5 rounded-full shadow-[0_0_10px_rgba(244,63,94,0.6)] z-20 border-2 border-slate-900 animate-[bounce_2s_infinite]">
           🔥 HARI INI
         </div>
       )}
