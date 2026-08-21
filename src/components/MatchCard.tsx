@@ -227,9 +227,25 @@ export const MatchCard: React.FC<MatchCardProps> = ({
   };
 
   const hasBye = (match.t1?.id === 'BYE' || match.t2?.id === 'BYE') && !isFinal;
+  
+  const getTodayDate = () => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  const isToday = match.schedule?.date === getTodayDate();
 
   return (
     <div className="match-card relative w-[260px] group">
+      {/* Opsi 1: Pita Mengambang HARI INI */}
+      {isToday && !match.winner && (
+        <div className="absolute -top-2.5 -right-2.5 bg-rose-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(244,63,94,0.6)] z-20 border-2 border-slate-900 animate-[bounce_2s_infinite]">
+          🔥 HARI INI
+        </div>
+      )}
+
       <div
         className={`backdrop-blur-md border rounded-2xl overflow-hidden shadow-xl transition-all duration-300 w-full h-full relative z-10 group-hover:border-slate-400/80 group-hover:shadow-2xl ${
           isFinal
