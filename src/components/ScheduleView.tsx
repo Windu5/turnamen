@@ -140,7 +140,8 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
     if (!dateStr) return 'TBA';
     const [year, month, day] = dateStr.split('-');
     if (!year || !month || !day) return dateStr;
-    return `${day}-${month}-${year}`;
+    const shortYear = year.slice(2);
+    return `${day}/${month}/${shortYear}`;
   };
 
   const handleSaveScore = (rIdx: number, mIdx: number) => {
@@ -267,11 +268,11 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                       key={matchId}
                       className="hover:bg-slate-700/40 transition-colors"
                     >
-                      <td className={`py-3 px-4 text-xs transition-colors ${match.winner ? (isWO ? 'bg-rose-500/10 border-l-[5px] border-l-rose-500' : 'bg-emerald-500/10 border-l-[5px] border-l-emerald-500') : 'text-slate-400'}`}>
+                      <td className={`py-2 sm:py-3 px-2 sm:px-4 text-xs transition-colors ${match.winner ? (isWO ? 'bg-rose-500/10 border-l-[5px] border-l-rose-500' : 'bg-emerald-500/10 border-l-[5px] border-l-emerald-500') : 'text-slate-400'}`}>
                         {match.winner ? (
                           <div className="flex flex-col gap-0.5">
-                            <span className={`text-[10px] font-bold uppercase tracking-wider ${isWO ? 'text-rose-500' : 'text-emerald-500'}`}>{isWO ? 'WALKOVER' : 'SELESAI'}</span>
-                            <span className="font-bold text-[13px] text-slate-200">{formatDate(match.schedule.date)}</span>
+                            <span className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${isWO ? 'text-rose-500' : 'text-emerald-500'}`}>{isWO ? 'WO' : 'SELESAI'}</span>
+                            <span className="font-bold text-xs sm:text-[13px] text-slate-200">{formatDate(match.schedule.date)}</span>
                           </div>
                         ) : (
                           <span>{formatDate(match.schedule.date)}</span>
